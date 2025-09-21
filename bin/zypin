@@ -1,0 +1,32 @@
+#!/usr/bin/env node
+/**
+ * Executable entry point for Zypin CLI
+ * Simple wrapper that calls main cli.js
+ * 
+ * TODO:
+ * - Make file executable
+ * - Call main cli.js with process arguments  
+ * - Handle basic execution errors
+ * - Add proper error exit codes
+ * - Ensure Node.js version compatibility check
+ */
+
+const path = require('path');
+
+// Check Node.js version
+const nodeVersion = process.versions.node;
+const majorVersion = parseInt(nodeVersion.split('.')[0]);
+
+if (majorVersion < 16) {
+  console.error('Error: zypin requires Node.js version 16 or higher');
+  console.error(`Current version: ${nodeVersion}`);
+  process.exit(1);
+}
+
+try {
+  // Call main CLI
+  require(path.join(__dirname, '..', 'cli.js'));
+} catch (error) {
+  console.error('Error starting zypin:', error.message);
+  process.exit(1);
+}
