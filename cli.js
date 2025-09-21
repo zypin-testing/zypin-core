@@ -464,6 +464,72 @@ program
     console.log(chalk.gray('  - Check health: zypin health --server http://localhost:8421'));
   });
 
+// MCP command
+program
+  .command('mcp')
+  .description('Start MCP server for browser automation')
+  .option('-b, --browser <browser>', 'Browser to use (chromium, firefox, webkit)', 'chromium')
+  .option('--headed', 'Run browser in headed mode')
+  .option('-w, --width <width>', 'Viewport width', '1280')
+  .option('-l, --height <height>', 'Viewport height', '720')
+  .option('-t, --timeout <timeout>', 'Default timeout in milliseconds', '30000')
+  .action(async (options) => {
+    // Set debug mode if global flag is provided
+    if (program.opts().debug) {
+      process.env.ZYPIN_DEBUG = 'true';
+      console.log(chalk.gray('Debug mode enabled'));
+    }
+
+    console.log(chalk.blue('🚀 Starting Zypin MCP Server...'));
+    console.log(chalk.gray('Browser automation via Model Context Protocol'));
+    console.log('');
+
+    try {
+      // Build command arguments for zypin-mcp
+      const args = ['zypin-mcp'];
+      
+      if (options.browser) args.push('--browser', options.browser);
+      if (options.headed) args.push('--headed');
+      if (options.width) args.push('--width', options.width);
+      if (options.height) args.push('--height', options.height);
+      if (options.timeout) args.push('--timeout', options.timeout);
+
+      // Spawn zypin-mcp process
+      const { spawn } = require('child_process');
+      const mcpProcess = spawn('npx', args, {
+        stdio: 'inherit',
+        cwd: process.cwd()
+      });
+
+      // Handle process events
+      mcpProcess.on('error', (error) => {
+        console.log(chalk.red(`Failed to start MCP server: ${error.message}`));
+        process.exit(1);
+      });
+
+      mcpProcess.on('exit', (code) => {
+        if (code !== 0) {
+          console.log(chalk.red(`MCP server exited with code ${code}`));
+        }
+        process.exit(code);
+      });
+
+      // Handle graceful shutdown
+      process.on('SIGINT', () => {
+        console.log(chalk.yellow('\nShutting down MCP server...'));
+        mcpProcess.kill('SIGINT');
+      });
+
+      process.on('SIGTERM', () => {
+        mcpProcess.kill('SIGTERM');
+      });
+
+    } catch (error) {
+      console.log(chalk.red(`Error starting MCP server: ${error.message}`));
+      process.exit(1);
+    }
+  });
+
 // Health command
 program
   .command('health')
