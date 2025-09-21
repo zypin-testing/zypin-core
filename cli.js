@@ -23,6 +23,32 @@ const templateManager = require('./core/template-manager');
 
 const program = new Command();
 
+// Helper function to get current versions
+async function getCurrentVersions() {
+  const versions = [];
+  
+  // Get core package version
+  try {
+    const corePackage = require('./package.json');
+    versions.push({ name: 'zypin-core', version: corePackage.version });
+  } catch (error) {
+    versions.push({ name: 'zypin-core', version: 'unknown' });
+  }
+  
+  // Get @zypin package versions
+  const availablePlugins = pluginLoader.getPlugins();
+  for (const plugin of availablePlugins) {
+    try {
+      const pluginPackage = require(path.join(plugin.path, 'package.json'));
+      versions.push({ name: `@zypin/${plugin.name}`, version: pluginPackage.version });
+    } catch (error) {
+      versions.push({ name: `@zypin/${plugin.name}`, version: 'unknown' });
+    }
+  }
+  
+  return versions;
+}
+
 program
   .name('zypin')
   .description('Tool-agnostic testing framework')
@@ -387,6 +413,55 @@ program
       console.log(chalk.red(`\n❌ Test execution failed: ${error.message}`));
       process.exit(1);
     }
+  });
+
+// Update command
+program
+  .command('update')
+  .description('Update zypin framework and all @zypin packages to latest versions')
+  .action(async () => {
+    // Set debug mode if global flag is provided
+    if (program.opts().debug) {
+      process.env.ZYPIN_DEBUG = 'true';
+      console.log(chalk.gray('Debug mode enabled'));
+    }
+
+    console.log(chalk.blue('🔄 Updating Zypin Framework...'));
+    console.log(chalk.gray('='.repeat(40)));
+
+    // Get current versions
+    const currentVersions = await getCurrentVersions();
+    console.log(chalk.blue('📋 Current versions:'));
+    currentVersions.forEach(pkg => {
+      console.log(chalk.gray(`  • ${pkg.name}: ${pkg.version}`));
+    });
+    console.log('');
+
+    // Update core package (dependencies will be updated automatically)
+    console.log(chalk.blue('📦 Updating core package and dependencies...'));
+    try {
+      const { execSync } = require('child_process');
+      execSync('npm install -g https://github.com/zypin-testing/zypin-core.git', { stdio: 'inherit' });
+      console.log(chalk.green('  ✓ Core package and dependencies updated'));
+    } catch (error) {
+      console.log(chalk.red('  ❌ Failed to update core package'));
+      return;
+    }
+
+    // Get new versions after update
+    console.log('');
+    console.log(chalk.blue('📋 New versions:'));
+    const newVersions = await getCurrentVersions();
+    newVersions.forEach(pkg => {
+      console.log(chalk.gray(`  • ${pkg.name}: ${pkg.version}`));
+    });
+
+    console.log('');
+    console.log(chalk.green('✅ Update complete! Core package and dependencies updated successfully.'));
+    console.log('');
+    console.log(chalk.blue('💡 Next steps:'));
+    console.log(chalk.gray('  - Restart any running services: zypin start --packages selenium'));
+    console.log(chalk.gray('  - Check health: zypin health --server http://localhost:8421'));
   });
 
 // Health command
