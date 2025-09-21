@@ -108,14 +108,11 @@ function showStartHelp() {
   console.log(chalk.blue('💡 Usage Examples:'));
   console.log(chalk.gray('='.repeat(20)));
   console.log(chalk.gray('  zypin start --packages selenium'));
-  console.log(chalk.gray('  zypin start --packages selenium,playwright'));
-  console.log(chalk.gray('  zypin start --packages selenium --server http://remote:8421'));
   console.log('');
 
   console.log(chalk.blue('🔧 Options:'));
   console.log(chalk.gray('='.repeat(15)));
   console.log(chalk.gray('  --packages <packages>  Comma-separated list of packages to start'));
-  console.log(chalk.gray('  --server <url>        Zypin server URL (e.g., http://server:8421)'));
   console.log('');
 
   console.log(chalk.blue('📚 Next Steps:'));
@@ -150,9 +147,15 @@ startCommand.action(async (options) => {
     const serverUrl = program.opts().server;
 
     if (serverUrl) {
-      console.log(chalk.yellow('Remote start not supported. Please SSH to server:'));
-      console.log(chalk.gray(`ssh user@${new URL(serverUrl).hostname}`));
-      console.log(chalk.gray(`zypin start --packages ${options.packages || 'selenium'}`));
+      try {
+        const url = new URL(serverUrl);
+        console.log(chalk.yellow('Remote start not supported. Please SSH to server:'));
+        console.log(chalk.gray(`ssh user@${url.hostname}`));
+        console.log(chalk.gray(`zypin start --packages ${options.packages || 'selenium'}`));
+      } catch (error) {
+        console.log(chalk.red('Invalid server URL provided:'), serverUrl);
+        console.log(chalk.gray('Please provide a valid URL (e.g., http://server:8421)'));
+      }
       return;
     }
 
@@ -236,7 +239,7 @@ function showCreateProjectHelp() {
   console.log(chalk.gray('='.repeat(20)));
   console.log(chalk.gray('  zypin create-project my-tests --template selenium/basic-webdriver'));
   console.log(chalk.gray('  zypin create-project api-tests --template selenium/cucumber-bdd'));
-  console.log(chalk.gray('  zypin create-project ui-tests --template playwright/basic-playwright'));
+  console.log(chalk.gray('  zypin create-project ui-tests --template selenium/cucumber-bdd'));
   console.log('');
 
   console.log(chalk.blue('🔧 Options:'));
