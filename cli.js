@@ -46,6 +46,25 @@ async function getCurrentVersions() {
     }
   }
   
+  // Check for zypin-mcp package
+  try {
+    const { execSync } = require('child_process');
+    const mcpVersion = execSync('npm list -g zypin-mcp --depth=0 --json', { encoding: 'utf8' });
+    const mcpInfo = JSON.parse(mcpVersion);
+    if (mcpInfo.dependencies && mcpInfo.dependencies['zypin-mcp']) {
+      versions.push({ name: 'zypin-mcp', version: mcpInfo.dependencies['zypin-mcp'].version });
+    }
+  } catch (error) {
+    // zypin-mcp not installed globally, check if it's available via npx
+    try {
+      const { execSync } = require('child_process');
+      execSync('npx zypin-mcp --version', { encoding: 'utf8', stdio: 'pipe' });
+      versions.push({ name: 'zypin-mcp', version: 'available (npx)' });
+    } catch (npxError) {
+      // zypin-mcp not available
+    }
+  }
+  
   return versions;
 }
 
@@ -461,6 +480,7 @@ program
     console.log('');
     console.log(chalk.blue('💡 Next steps:'));
     console.log(chalk.gray('  - Restart any running services: zypin start --packages selenium'));
+    console.log(chalk.gray('  - Start MCP server: zypin mcp'));
     console.log(chalk.gray('  - Check health: zypin health --server http://localhost:8421'));
   });
 
