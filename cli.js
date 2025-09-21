@@ -73,12 +73,74 @@ program
   .option('--server <url>', 'Zypin server URL (e.g., http://server:8421)')
   .option('--debug', 'Enable debug mode to show detailed output');
 
+// Helper function to show start help
+function showStartHelp() {
+  console.log(chalk.blue('🚀 Zypin Package Starter'));
+  console.log(chalk.gray('='.repeat(30)));
+  console.log(chalk.gray('Start testing packages and their services'));
+  console.log('');
+
+  // Show available packages
+  const availablePlugins = pluginLoader.getPlugins();
+
+  console.log(chalk.blue('📦 Available Packages:'));
+  console.log(chalk.gray('='.repeat(25)));
+
+  if (availablePlugins.length === 0) {
+    console.log(chalk.yellow('No packages found in node_modules/@zypin/'));
+    console.log(chalk.gray('Install packages with: npm install -g https://github.com/zypin-testing/zypin-selenium'));
+  } else {
+    availablePlugins.forEach(plugin => {
+      const capabilities = [];
+      if (plugin.hasStart) capabilities.push('start');
+      if (plugin.hasRun) capabilities.push('run');
+      if (plugin.hasHealth) capabilities.push('health');
+
+      console.log(`  ${chalk.green('●')} ${chalk.bold(plugin.name)}`);
+      console.log(`    ${chalk.gray(`Capabilities: ${capabilities.join(', ')}`)}`);
+      if (plugin.templates.length > 0) {
+        console.log(`    ${chalk.gray(`Templates: ${plugin.templates.join(', ')}`)}`);
+      }
+    });
+  }
+
+  console.log('');
+  console.log(chalk.blue('💡 Usage Examples:'));
+  console.log(chalk.gray('='.repeat(20)));
+  console.log(chalk.gray('  zypin start --packages selenium'));
+  console.log(chalk.gray('  zypin start --packages selenium,playwright'));
+  console.log(chalk.gray('  zypin start --packages selenium --server http://remote:8421'));
+  console.log('');
+
+  console.log(chalk.blue('🔧 Options:'));
+  console.log(chalk.gray('='.repeat(15)));
+  console.log(chalk.gray('  --packages <packages>  Comma-separated list of packages to start'));
+  console.log(chalk.gray('  --server <url>        Zypin server URL (e.g., http://server:8421)'));
+  console.log('');
+
+  console.log(chalk.blue('📚 Next Steps:'));
+  console.log(chalk.gray('='.repeat(15)));
+  console.log(chalk.gray('  1. Start packages:  zypin start --packages selenium'));
+  console.log(chalk.gray('  2. Check health:    zypin health --server http://localhost:8421'));
+  console.log(chalk.gray('  3. Run tests:       zypin run --input <test-files>'));
+  console.log('');
+
+  console.log(chalk.gray('For more help: zypin --help'));
+}
+
 // Start command
-program
+const startCommand = program
   .command('start')
   .description('Start testing packages')
-  .option('--packages <packages>', 'Comma-separated list of packages to start')
-  .action(async (options) => {
+  .option('--packages <packages>', 'Comma-separated list of packages to start');
+
+// Override the help function to show custom help
+startCommand.helpInformation = function() {
+  showStartHelp();
+  return '';
+};
+
+startCommand.action(async (options) => {
     // Set debug mode if global flag is provided
     if (program.opts().debug) {
       process.env.ZYPIN_DEBUG = 'true';
@@ -114,33 +176,7 @@ program
     }
 
     if (!options.packages) {
-      // Show available packages when no packages specified
-      const availablePlugins = pluginLoader.getPlugins();
-
-      console.log(chalk.blue('Available packages:'));
-      console.log(chalk.gray('='.repeat(20)));
-
-      if (availablePlugins.length === 0) {
-        console.log(chalk.yellow('No packages found in node_modules/@zypin/'));
-        console.log(chalk.gray('Install packages with: npm install -g https://github.com/zypin-testing/zypin-selenium'));
-      } else {
-        availablePlugins.forEach(plugin => {
-          const capabilities = [];
-          if (plugin.hasStart) capabilities.push('start');
-          if (plugin.hasRun) capabilities.push('run');
-          if (plugin.hasHealth) capabilities.push('health');
-
-          console.log(`  ${chalk.green('●')} ${chalk.bold(plugin.name)}`);
-          console.log(`    Capabilities: ${capabilities.join(', ')}`);
-          if (plugin.templates.length > 0) {
-            console.log(`    Templates: ${plugin.templates.join(', ')}`);
-          }
-        });
-
-        console.log(chalk.gray('\nUsage: zypin start --packages <package1,package2,...>'));
-        console.log(chalk.gray('Example: zypin start --packages selenium'));
-      }
-
+      showStartHelp();
       // Stop server when no packages specified
       console.log(chalk.gray('\nNo packages specified. Stopping server.'));
       await zypinServer.stopServer();
@@ -171,14 +207,70 @@ program
     console.log(chalk.green(`Started ${startedCount} of ${packageNames.length} packages`));
   });
 
+// Helper function to show create-project help
+function showCreateProjectHelp() {
+  console.log(chalk.blue('🚀 Zypin Project Creator'));
+  console.log(chalk.gray('='.repeat(40)));
+  console.log(chalk.gray('Create a new test project from available templates'));
+  console.log('');
+
+  // Show available templates
+  const availableTemplates = templateScanner.getTemplates();
+
+  console.log(chalk.blue('📋 Available Templates:'));
+  console.log(chalk.gray('='.repeat(25)));
+
+  if (availableTemplates.length === 0) {
+    console.log(chalk.yellow('No templates found'));
+    console.log(chalk.gray('Install packages with templates: npm install -g https://github.com/zypin-testing/zypin-selenium'));
+  } else {
+    availableTemplates.forEach(template => {
+      console.log(`  ${chalk.green('●')} ${chalk.bold(template.namespacedName)}`);
+      console.log(`    ${chalk.gray(`Package: ${template.plugin} | Template: ${template.name}`)}`);
+      console.log(`    ${chalk.gray(template.description)}`);
+    });
+  }
+
+  console.log('');
+  console.log(chalk.blue('💡 Usage Examples:'));
+  console.log(chalk.gray('='.repeat(20)));
+  console.log(chalk.gray('  zypin create-project my-tests --template selenium/basic-webdriver'));
+  console.log(chalk.gray('  zypin create-project api-tests --template selenium/cucumber-bdd'));
+  console.log(chalk.gray('  zypin create-project ui-tests --template playwright/basic-playwright'));
+  console.log('');
+
+  console.log(chalk.blue('🔧 Options:'));
+  console.log(chalk.gray('='.repeat(15)));
+  console.log(chalk.gray('  --template <template>  Template to use (required)'));
+  console.log(chalk.gray('  --force               Overwrite existing directory'));
+  console.log('');
+
+  console.log(chalk.blue('📚 Next Steps:'));
+  console.log(chalk.gray('='.repeat(15)));
+  console.log(chalk.gray('  1. Create project: zypin create-project <name> --template <template>'));
+  console.log(chalk.gray('  2. Install deps:   cd <project> && npm install'));
+  console.log(chalk.gray('  3. Start servers:  zypin start --packages selenium'));
+  console.log(chalk.gray('  4. Run tests:      zypin run --input <test-files>'));
+  console.log('');
+
+  console.log(chalk.gray('For more help: zypin --help'));
+}
+
 // Create-project command
-program
+const createProjectCommand = program
   .command('create-project')
   .description('Create a new test project from a template')
   .argument('[project-name]', 'Name of the project to create')
   .option('--template <template>', 'Template to use (e.g., selenium/basic-webdriver)')
-  .option('--force', 'Overwrite existing directory')
-  .action(async (projectName, options) => {
+  .option('--force', 'Overwrite existing directory');
+
+// Override the help function to show custom help
+createProjectCommand.helpInformation = function() {
+  showCreateProjectHelp();
+  return '';
+};
+
+createProjectCommand.action(async (projectName, options) => {
     // Set debug mode if global flag is provided
     if (program.opts().debug) {
       process.env.ZYPIN_DEBUG = 'true';
@@ -187,51 +279,7 @@ program
 
     // Show help if no project name provided
     if (!projectName) {
-      console.log(chalk.blue('🚀 Zypin Project Creator'));
-      console.log(chalk.gray('='.repeat(40)));
-      console.log(chalk.gray('Create a new test project from available templates'));
-      console.log('');
-
-      // Show available templates
-      const availableTemplates = templateScanner.getTemplates();
-
-      console.log(chalk.blue('📋 Available Templates:'));
-      console.log(chalk.gray('='.repeat(25)));
-
-      if (availableTemplates.length === 0) {
-        console.log(chalk.yellow('No templates found'));
-        console.log(chalk.gray('Install packages with templates: npm install -g https://github.com/zypin-testing/zypin-selenium'));
-      } else {
-        availableTemplates.forEach(template => {
-          console.log(`  ${chalk.green('●')} ${chalk.bold(template.namespacedName)}`);
-          console.log(`    ${chalk.gray(`Package: ${template.plugin} | Template: ${template.name}`)}`);
-          console.log(`    ${chalk.gray(template.description)}`);
-        });
-      }
-
-      console.log('');
-      console.log(chalk.blue('💡 Usage Examples:'));
-      console.log(chalk.gray('='.repeat(20)));
-      console.log(chalk.gray('  zypin create-project my-tests --template selenium/basic-webdriver'));
-      console.log(chalk.gray('  zypin create-project api-tests --template selenium/cucumber-bdd'));
-      console.log(chalk.gray('  zypin create-project ui-tests --template playwright/basic-playwright'));
-      console.log('');
-
-      console.log(chalk.blue('🔧 Options:'));
-      console.log(chalk.gray('='.repeat(15)));
-      console.log(chalk.gray('  --template <template>  Template to use (required)'));
-      console.log(chalk.gray('  --force               Overwrite existing directory'));
-      console.log('');
-
-      console.log(chalk.blue('📚 Next Steps:'));
-      console.log(chalk.gray('='.repeat(15)));
-      console.log(chalk.gray('  1. Create project: zypin create-project <name> --template <template>'));
-      console.log(chalk.gray('  2. Install deps:   cd <project> && npm install'));
-      console.log(chalk.gray('  3. Start servers:  zypin start --packages selenium'));
-      console.log(chalk.gray('  4. Run tests:      zypin run --input <test-files>'));
-      console.log('');
-
-      console.log(chalk.gray('For more help: zypin --help'));
+      showCreateProjectHelp();
       return;
     }
 
@@ -283,8 +331,92 @@ program
     }
   });
 
+// Helper function to show run help
+function showRunHelp() {
+  console.log(chalk.blue('🧪 Zypin Test Runner'));
+  console.log(chalk.gray('='.repeat(30)));
+  console.log(chalk.gray('Run tests using detected template from package.json'));
+  console.log('');
+
+  // Check if we're in a zypin project
+  const packageJsonPath = path.join(process.cwd(), 'package.json');
+  if (!require('fs').existsSync(packageJsonPath)) {
+    console.log(chalk.red('❌ No package.json found in current directory'));
+    console.log(chalk.gray('Make sure you are in a Zypin project directory'));
+    console.log('');
+    console.log(chalk.blue('💡 Create a project first:'));
+    console.log(chalk.gray('  zypin create-project my-tests --template selenium/basic-webdriver'));
+    console.log('');
+    console.log(chalk.gray('For more help: zypin --help'));
+    return;
+  }
+
+  const userPackageJson = JSON.parse(require('fs').readFileSync(packageJsonPath, 'utf8'));
+  const packageName = userPackageJson.zypin?.package;
+  const templateName = userPackageJson.zypin?.template;
+
+  if (!packageName || !templateName) {
+    console.log(chalk.red('❌ No zypin configuration found in package.json'));
+    console.log(chalk.gray('Make sure you created this project with "zypin create-project"'));
+    console.log('');
+    console.log(chalk.blue('💡 Create a project first:'));
+    console.log(chalk.gray('  zypin create-project my-tests --template selenium/basic-webdriver'));
+    console.log('');
+    console.log(chalk.gray('For more help: zypin --help'));
+    return;
+  }
+
+  console.log(chalk.blue('📋 Current Project:'));
+  console.log(chalk.gray('='.repeat(20)));
+  console.log(chalk.gray(`  Package: ${packageName}`));
+  console.log(chalk.gray(`  Template: ${templateName}`));
+  console.log('');
+
+  console.log(chalk.blue('💡 Usage Examples:'));
+  console.log(chalk.gray('='.repeat(20)));
+  
+  // Show template-specific examples
+  if (templateName === 'cucumber-bdd') {
+    console.log(chalk.gray('  zypin run --input features/'));
+    console.log(chalk.gray('  zypin run --input features/demo.feature'));
+    console.log(chalk.gray('  zypin run --input features/login.feature,features/checkout.feature'));
+  } else {
+    console.log(chalk.gray('  zypin run --input test.js'));
+    console.log(chalk.gray('  zypin run --input tests/'));
+    console.log(chalk.gray('  zypin run --input test1.js,test2.js'));
+  }
+  console.log('');
+
+  console.log(chalk.blue('🔧 Configuration Options:'));
+  console.log(chalk.gray('='.repeat(25)));
+  console.log(chalk.gray('  --input <files>        Test files or directories to run (required)'));
+  console.log(chalk.gray('  --browser <browser>     Browser (chrome, firefox, safari, edge)'));
+  console.log(chalk.gray('  --headless             Run in headless mode'));
+  console.log(chalk.gray('  --timeout <ms>         Test timeout in milliseconds'));
+  console.log(chalk.gray('  --parallel <number>    Number of parallel executions'));
+  console.log(chalk.gray('  --retries <number>     Number of retries for failed tests'));
+  console.log(chalk.gray('  --window-size <size>   Browser window size (WIDTHxHEIGHT)'));
+  console.log('');
+
+  console.log(chalk.blue('📚 Next Steps:'));
+  console.log(chalk.gray('='.repeat(15)));
+  console.log(chalk.gray('  1. Start servers:  zypin start --packages selenium'));
+  
+  // Show template-specific next steps
+  if (templateName === 'cucumber-bdd') {
+    console.log(chalk.gray('  2. Run tests:      zypin run --input features/'));
+    console.log(chalk.gray('  3. Run with options: zypin run --input features/ --browser firefox --headless'));
+  } else {
+    console.log(chalk.gray('  2. Run tests:      zypin run --input test.js'));
+    console.log(chalk.gray('  3. Run with options: zypin run --input test.js --browser firefox --headless'));
+  }
+  console.log('');
+
+  console.log(chalk.gray('For more help: zypin --help'));
+}
+
 // Run command
-program
+const runCommand = program
   .command('run')
   .description('Run tests using detected template')
   .option('--input <files>', 'Test files or directories to run (required)')
@@ -293,8 +425,15 @@ program
   .option('--timeout <ms>', 'Test timeout in milliseconds')
   .option('--parallel <number>', 'Number of parallel test executions')
   .option('--retries <number>', 'Number of retries for failed tests')
-  .option('--window-size <size>', 'Browser window size (WIDTHxHEIGHT)')
-  .action(async (options) => {
+  .option('--window-size <size>', 'Browser window size (WIDTHxHEIGHT)');
+
+// Override the help function to show custom help
+runCommand.helpInformation = function() {
+  showRunHelp();
+  return '';
+};
+
+runCommand.action(async (options) => {
     // Set debug mode if global flag is provided
     if (program.opts().debug) {
       process.env.ZYPIN_DEBUG = 'true';
@@ -302,78 +441,7 @@ program
     }
 
     if (!options.input) {
-      console.log(chalk.blue('🧪 Zypin Test Runner'));
-      console.log(chalk.gray('='.repeat(30)));
-      console.log(chalk.gray('Run tests using detected template from package.json'));
-      console.log('');
-
-      // Check if we're in a zypin project
-      const packageJsonPath = path.join(process.cwd(), 'package.json');
-      if (!require('fs').existsSync(packageJsonPath)) {
-        console.log(chalk.red('❌ No package.json found in current directory'));
-        console.log(chalk.gray('Make sure you are in a Zypin project directory'));
-        console.log('');
-        console.log(chalk.blue('💡 Create a project first:'));
-        console.log(chalk.gray('  zypin create-project my-tests --template selenium/basic-webdriver'));
-        return;
-      }
-
-      const userPackageJson = JSON.parse(require('fs').readFileSync(packageJsonPath, 'utf8'));
-      const packageName = userPackageJson.zypin?.package;
-      const templateName = userPackageJson.zypin?.template;
-
-      if (!packageName || !templateName) {
-        console.log(chalk.red('❌ No zypin configuration found in package.json'));
-        console.log(chalk.gray('Make sure you created this project with "zypin create-project"'));
-        return;
-      }
-
-      console.log(chalk.blue('📋 Current Project:'));
-      console.log(chalk.gray('='.repeat(20)));
-      console.log(chalk.gray(`  Package: ${packageName}`));
-      console.log(chalk.gray(`  Template: ${templateName}`));
-      console.log('');
-
-      console.log(chalk.blue('💡 Usage Examples:'));
-      console.log(chalk.gray('='.repeat(20)));
-      
-      // Show template-specific examples
-      if (templateName === 'cucumber-bdd') {
-        console.log(chalk.gray('  zypin run --input features/'));
-        console.log(chalk.gray('  zypin run --input features/demo.feature'));
-        console.log(chalk.gray('  zypin run --input features/login.feature,features/checkout.feature'));
-      } else {
-        console.log(chalk.gray('  zypin run --input test.js'));
-        console.log(chalk.gray('  zypin run --input tests/'));
-        console.log(chalk.gray('  zypin run --input test1.js,test2.js'));
-      }
-      console.log('');
-
-      console.log(chalk.blue('🔧 Configuration Options:'));
-      console.log(chalk.gray('='.repeat(25)));
-      console.log(chalk.gray('  --browser <browser>     Browser (chrome, firefox, safari, edge)'));
-      console.log(chalk.gray('  --headless             Run in headless mode'));
-      console.log(chalk.gray('  --timeout <ms>         Test timeout in milliseconds'));
-      console.log(chalk.gray('  --parallel <number>    Number of parallel executions'));
-      console.log(chalk.gray('  --retries <number>     Number of retries for failed tests'));
-      console.log(chalk.gray('  --window-size <size>   Browser window size (WIDTHxHEIGHT)'));
-      console.log('');
-
-      console.log(chalk.blue('📚 Next Steps:'));
-      console.log(chalk.gray('='.repeat(15)));
-      console.log(chalk.gray('  1. Start servers:  zypin start --packages selenium'));
-      
-      // Show template-specific next steps
-      if (templateName === 'cucumber-bdd') {
-        console.log(chalk.gray('  2. Run tests:      zypin run --input features/'));
-        console.log(chalk.gray('  3. Run with options: zypin run --input features/ --browser firefox --headless'));
-      } else {
-        console.log(chalk.gray('  2. Run tests:      zypin run --input test.js'));
-        console.log(chalk.gray('  3. Run with options: zypin run --input test.js --browser firefox --headless'));
-      }
-      console.log('');
-
-      console.log(chalk.gray('For more help: zypin --help'));
+      showRunHelp();
       return;
     }
 
@@ -482,16 +550,65 @@ program
     console.log(chalk.gray('  - Check health: zypin health --server http://localhost:8421'));
   });
 
+// Helper function to show MCP help
+function showMcpHelp() {
+  console.log(chalk.blue('🤖 Zypin MCP Server'));
+  console.log(chalk.gray('='.repeat(25)));
+  console.log(chalk.gray('Start MCP server for browser automation via Model Context Protocol'));
+  console.log('');
+
+  console.log(chalk.blue('💡 Usage Examples:'));
+  console.log(chalk.gray('='.repeat(20)));
+  console.log(chalk.gray('  zypin mcp'));
+  console.log(chalk.gray('  zypin mcp --browser firefox --headed'));
+  console.log(chalk.gray('  zypin mcp --browser webkit --width 1920 --height 1080'));
+  console.log(chalk.gray('  zypin mcp --timeout 60000'));
+  console.log('');
+
+  console.log(chalk.blue('🔧 Options:'));
+  console.log(chalk.gray('='.repeat(15)));
+  console.log(chalk.gray('  -b, --browser <browser>  Browser to use (chromium, firefox, webkit) [default: chromium]'));
+  console.log(chalk.gray('  --headed                Run browser in headed mode (visible)'));
+  console.log(chalk.gray('  -w, --width <width>     Viewport width [default: 1280]'));
+  console.log(chalk.gray('  -l, --height <height>   Viewport height [default: 720]'));
+  console.log(chalk.gray('  -t, --timeout <ms>      Default timeout in milliseconds [default: 30000]'));
+  console.log('');
+
+  console.log(chalk.blue('📚 Next Steps:'));
+  console.log(chalk.gray('='.repeat(15)));
+  console.log(chalk.gray('  1. Start MCP server: zypin mcp'));
+  console.log(chalk.gray('  2. Connect AI tools: Use MCP protocol to connect'));
+  console.log(chalk.gray('  3. Automate browser: Send commands via MCP'));
+  console.log('');
+
+  console.log(chalk.blue('🔍 What it does:'));
+  console.log(chalk.gray('='.repeat(20)));
+  console.log(chalk.gray('  • Starts Model Context Protocol server'));
+  console.log(chalk.gray('  • Provides browser automation capabilities'));
+  console.log(chalk.gray('  • Enables AI tools to control browsers'));
+  console.log(chalk.gray('  • Supports multiple browsers and configurations'));
+  console.log('');
+
+  console.log(chalk.gray('For more help: zypin --help'));
+}
+
 // MCP command
-program
+const mcpCommand = program
   .command('mcp')
   .description('Start MCP server for browser automation')
   .option('-b, --browser <browser>', 'Browser to use (chromium, firefox, webkit)', 'chromium')
   .option('--headed', 'Run browser in headed mode')
   .option('-w, --width <width>', 'Viewport width', '1280')
   .option('-l, --height <height>', 'Viewport height', '720')
-  .option('-t, --timeout <timeout>', 'Default timeout in milliseconds', '30000')
-  .action(async (options) => {
+  .option('-t, --timeout <timeout>', 'Default timeout in milliseconds', '30000');
+
+// Override the help function to show custom help
+mcpCommand.helpInformation = function() {
+  showMcpHelp();
+  return '';
+};
+
+mcpCommand.action(async (options) => {
     // Set debug mode if global flag is provided
     if (program.opts().debug) {
       process.env.ZYPIN_DEBUG = 'true';
@@ -549,11 +666,55 @@ program
     }
   });
 
+// Helper function to show health help
+function showHealthHelp() {
+  console.log(chalk.blue('🏥 Zypin Health Checker'));
+  console.log(chalk.gray('='.repeat(30)));
+  console.log(chalk.gray('Check health status of running packages on remote server'));
+  console.log('');
+
+  console.log(chalk.blue('💡 Usage Examples:'));
+  console.log(chalk.gray('='.repeat(20)));
+  console.log(chalk.gray('  zypin health --server http://localhost:8421'));
+  console.log(chalk.gray('  zypin health --server http://remote-server:8421'));
+  console.log(chalk.gray('  zypin health --server http://192.168.1.100:8421'));
+  console.log('');
+
+  console.log(chalk.blue('🔧 Options:'));
+  console.log(chalk.gray('='.repeat(15)));
+  console.log(chalk.gray('  --server <url>        Zypin server URL (required)'));
+  console.log(chalk.gray('  --debug               Enable debug mode'));
+  console.log('');
+
+  console.log(chalk.blue('📚 Next Steps:'));
+  console.log(chalk.gray('='.repeat(15)));
+  console.log(chalk.gray('  1. Start server:    zypin start --packages selenium'));
+  console.log(chalk.gray('  2. Check health:    zypin health --server http://localhost:8421'));
+  console.log(chalk.gray('  3. Run tests:       zypin run --input <test-files>'));
+  console.log('');
+
+  console.log(chalk.blue('🔍 What it shows:'));
+  console.log(chalk.gray('='.repeat(20)));
+  console.log(chalk.gray('  • Number of running packages'));
+  console.log(chalk.gray('  • Package names and PIDs'));
+  console.log(chalk.gray('  • Start times and status'));
+  console.log('');
+
+  console.log(chalk.gray('For more help: zypin --help'));
+}
+
 // Health command
-program
+const healthCommand = program
   .command('health')
-  .description('Check health status of running packages')
-  .action(async () => {
+  .description('Check health status of running packages');
+
+// Override the help function to show custom help
+healthCommand.helpInformation = function() {
+  showHealthHelp();
+  return '';
+};
+
+healthCommand.action(async () => {
     // Set debug mode if global flag is provided
     if (program.opts().debug) {
       process.env.ZYPIN_DEBUG = 'true';
@@ -563,7 +724,7 @@ program
     const serverUrl = program.opts().server;
 
     if (!serverUrl) {
-      console.log(chalk.red('Server URL required. Use --server <url>'));
+      showHealthHelp();
       return;
     }
 
