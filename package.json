@@ -24,8 +24,7 @@
   "author": "",
   "license": "MIT",
   "bin": {
-    "zypin": "./bin/zypin",
-    "zypin-mcp": "./node_modules/.bin/zypin-mcp"
+    "zypin": "./bin/zypin"
   },
   "scripts": {
     "start": "node cli.js",

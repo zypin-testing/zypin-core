@@ -48,8 +48,9 @@ async function getCurrentVersions() {
   
   // Check for zypin-mcp package
   try {
+    const zypinMcpPath = require.resolve('zypin-mcp');
     const { execSync } = require('child_process');
-    const mcpVersion = execSync('zypin-mcp --version', { 
+    const mcpVersion = execSync(`node ${zypinMcpPath} --version`, { 
       encoding: 'utf8', 
       stdio: 'pipe',
       timeout: 10000 // 10 second timeout
@@ -511,9 +512,10 @@ program
       if (options.height) args.push('--height', options.height);
       if (options.timeout) args.push('--timeout', options.timeout);
 
-      // Spawn zypin-mcp process
+      // Execute zypin-mcp directly using require
+      const zypinMcpPath = require.resolve('zypin-mcp');
       const { spawn } = require('child_process');
-      const mcpProcess = spawn('zypin-mcp', args, {
+      const mcpProcess = spawn('node', [zypinMcpPath, ...args], {
         stdio: 'inherit',
         cwd: process.cwd()
       });
