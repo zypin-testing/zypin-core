@@ -49,20 +49,17 @@ async function getCurrentVersions() {
   // Check for zypin-mcp package
   try {
     const { execSync } = require('child_process');
-    const mcpVersion = execSync('npm list -g zypin-mcp --depth=0 --json', { encoding: 'utf8' });
-    const mcpInfo = JSON.parse(mcpVersion);
-    if (mcpInfo.dependencies && mcpInfo.dependencies['zypin-mcp']) {
-      versions.push({ name: 'zypin-mcp', version: mcpInfo.dependencies['zypin-mcp'].version });
-    }
+    const mcpVersion = execSync('zypin-mcp --version', { 
+      encoding: 'utf8', 
+      stdio: 'pipe',
+      timeout: 10000 // 10 second timeout
+    });
+    // If we get here, the command succeeded
+    const version = mcpVersion.trim();
+    versions.push({ name: 'zypin-mcp', version: version || 'available' });
   } catch (error) {
-    // zypin-mcp not installed globally, check if it's available via npx
-    try {
-      const { execSync } = require('child_process');
-      execSync('npx zypin-mcp --version', { encoding: 'utf8', stdio: 'pipe' });
-      versions.push({ name: 'zypin-mcp', version: 'available (npx)' });
-    } catch (npxError) {
-      // zypin-mcp not available
-    }
+    // zypin-mcp not available
+    // This is expected and not an error condition
   }
   
   return versions;
@@ -506,7 +503,7 @@ program
 
     try {
       // Build command arguments for zypin-mcp
-      const args = ['zypin-mcp'];
+      const args = [];
       
       if (options.browser) args.push('--browser', options.browser);
       if (options.headed) args.push('--headed');
@@ -516,7 +513,7 @@ program
 
       // Spawn zypin-mcp process
       const { spawn } = require('child_process');
-      const mcpProcess = spawn('npx', args, {
+      const mcpProcess = spawn('zypin-mcp', args, {
         stdio: 'inherit',
         cwd: process.cwd()
       });
