@@ -327,41 +327,24 @@ function showHealthHelp() {
 function showGuideHelp() {
   console.log(chalk.blue('📚 Zypin Guide Viewer'));
   console.log(chalk.gray('='.repeat(30)));
-  console.log(chalk.gray('View usage guides and documentation for templates'));
+  console.log(chalk.gray('View usage guides and documentation for current template'));
   console.log('');
   
   console.log(chalk.blue('💡 Usage:'));
   console.log(chalk.gray('='.repeat(15)));
-  console.log(chalk.gray('  zypin guide --template <template>   # Show specific guide'));
-  console.log(chalk.gray('  zypin guide --list             # List available guides'));
+  console.log(chalk.gray('  zypin guide --write      # Show writing guide'));
+  console.log(chalk.gray('  zypin guide --debugging  # Show debugging guide'));
   console.log('');
   
   console.log(chalk.blue('📋 Available guides:'));
   console.log(chalk.gray('='.repeat(20)));
-  const guidesWithGuides = getGuidesWithManuals();
-  
-  if (guidesWithGuides.length === 0) {
-    console.log(chalk.gray('  No guides available.'));
-  } else {
-    guidesWithGuides.forEach(template => {
-      console.log(chalk.gray(`  • ${template.namespacedName}`));
-    });
-  }
+  console.log(chalk.gray('  • Writing Guide - How to write test code'));
+  console.log(chalk.gray('  • Debugging Guide - How to debug and troubleshoot'));
   console.log('');
   
   console.log(chalk.gray('For more help: zypin --help'));
 }
 
-// Helper function to get templates with guides
-function getGuidesWithManuals() {
-  const templates = templateScanner.getTemplates() || [];
-  return templates.filter(t => {
-    const fs = require('fs');
-    const installedPath = path.join(t.path, 'USER_MANUAL.md');
-    const sourcePath = path.join(__dirname, '..', '..', 'zypin-selenium', 'templates', t.name, 'USER_MANUAL.md');
-    return fs.existsSync(installedPath) || fs.existsSync(sourcePath);
-  });
-}
 
 module.exports = {
   getCurrentVersions,
@@ -370,6 +353,5 @@ module.exports = {
   showRunHelp,
   showMcpHelp,
   showHealthHelp,
-  showGuideHelp,
-  getGuidesWithManuals
+  showGuideHelp
 };

@@ -1,11 +1,11 @@
 Zypin CLI Test Results
-Generated on: Mon Sep 22 19:36:57 +07 2025
+Generated on: Mon Sep 22 19:43:15 +07 2025
 ===========================================
 
 
 ===========================================
 COMMAND: zypin (main help)
-TIMESTAMP: Mon Sep 22 19:36:57 +07 2025
+TIMESTAMP: Mon Sep 22 19:43:15 +07 2025
 ===========================================
 
 🚀 Zypin Global Mode
@@ -27,7 +27,7 @@ For more help: zypin <command> --help
 
 ===========================================
 COMMAND: zypin start --help
-TIMESTAMP: Mon Sep 22 19:36:57 +07 2025
+TIMESTAMP: Mon Sep 22 19:43:15 +07 2025
 ===========================================
 
 🚀 Zypin Package Starter
@@ -61,7 +61,7 @@ For more help: zypin --help
 
 ===========================================
 COMMAND: zypin create-project --help
-TIMESTAMP: Mon Sep 22 19:36:57 +07 2025
+TIMESTAMP: Mon Sep 22 19:43:16 +07 2025
 ===========================================
 
 🚀 Zypin Project Creator
@@ -99,7 +99,7 @@ For more help: zypin --help
 
 ===========================================
 COMMAND: zypin update --help
-TIMESTAMP: Mon Sep 22 19:36:57 +07 2025
+TIMESTAMP: Mon Sep 22 19:43:16 +07 2025
 ===========================================
 
 Usage: zypin update [options]
@@ -114,7 +114,7 @@ Options:
 
 ===========================================
 COMMAND: zypin mcp --help
-TIMESTAMP: Mon Sep 22 19:36:57 +07 2025
+TIMESTAMP: Mon Sep 22 19:43:16 +07 2025
 ===========================================
 
 🤖 Zypin MCP Server
@@ -156,7 +156,7 @@ For more help: zypin --help
 
 ===========================================
 COMMAND: zypin health --help
-TIMESTAMP: Mon Sep 22 19:36:57 +07 2025
+TIMESTAMP: Mon Sep 22 19:43:16 +07 2025
 ===========================================
 
 🏥 Zypin Health Checker
@@ -191,8 +191,27 @@ For more help: zypin --help
 
 
 ===========================================
+COMMAND: zypin (template mode - main help)
+TIMESTAMP: Mon Sep 22 19:43:16 +07 2025
+===========================================
+
+🧪 Zypin Template Mode
+==============================
+You are in a Zypin project directory
+
+📋 Available Commands:
+=========================
+  run     Run tests using detected template
+  guide   View template guides and documentation
+
+For more help: zypin <command> --help
+
+===========================================
+
+
+===========================================
 COMMAND: zypin run --help (template mode)
-TIMESTAMP: Mon Sep 22 19:36:57 +07 2025
+TIMESTAMP: Mon Sep 22 19:43:16 +07 2025
 ===========================================
 
 🧪 Zypin Test Runner
@@ -233,7 +252,7 @@ For more help: zypin --help
 
 ===========================================
 COMMAND: zypin guide --help (template mode)
-TIMESTAMP: Mon Sep 22 19:36:58 +07 2025
+TIMESTAMP: Mon Sep 22 19:43:16 +07 2025
 ===========================================
 
 📚 Zypin Guide Viewer

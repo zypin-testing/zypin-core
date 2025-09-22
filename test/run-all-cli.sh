@@ -101,10 +101,13 @@ print_status "Testing Template Mode Commands..."
 # Change to template directory for template mode commands
 cd "$PROJECT_ROOT/zypin-selenium/templates/cucumber-bdd"
 
-# 7. Run command help (template mode)
+# 7. Main zypin command (template mode - should show template mode help)
+run_command "node ../../../zypin-core/cli/index.js" "zypin (template mode - main help)"
+
+# 8. Run command help (template mode)
 run_command "node ../../../zypin-core/cli/index.js run --help" "zypin run --help (template mode)"
 
-# 8. Guide command help (template mode)
+# 9. Guide command help (template mode)
 run_command "node ../../../zypin-core/cli/index.js guide --help" "zypin guide --help (template mode)"
 
 # Return to project root

@@ -107,8 +107,8 @@ function setupCommands(program) {
   const guideCommand = program
     .command('guide')
     .description('View usage guides and documentation for templates')
-    .option('--template <template>', 'Template to use (e.g., selenium/cucumber-bdd)')
-    .option('--list', 'List all available guides');
+    .option('--write', 'Show writing guide for current template')
+    .option('--debugging', 'Show debugging guide for current template');
 
   guideCommand.helpInformation = function() {
     utils.showGuideHelp();
@@ -120,66 +120,53 @@ function setupCommands(program) {
       console.log(chalk.gray('Debug mode enabled'));
     }
 
-    if (options.list) {
-      const guidesWithGuides = utils.getGuidesWithManuals();
-      
-      console.log(chalk.blue('📚 Available Guides:'));
-      console.log(chalk.gray('='.repeat(25)));
-      
-      if (guidesWithGuides.length === 0) {
-        console.log(chalk.gray('No guides available.'));
-        return;
-      }
-      
-      guidesWithGuides.forEach(template => {
-        console.log(chalk.gray(`  • ${template.namespacedName}`));
-        console.log(chalk.gray(`    ${template.description}`));
-      });
-      
-      console.log('');
-      console.log(chalk.gray('Usage: zypin guide --template <template>'));
+    // Check if we're in a zypin project directory
+    const packageJsonPath = path.join(process.cwd(), 'package.json');
+    if (!fs.existsSync(packageJsonPath)) {
+      console.log(chalk.red('No package.json found. Make sure you are in a Zypin project directory.'));
+      console.log(chalk.gray('Use "zypin create-project" to create a new project first.'));
       return;
     }
 
-    if (!options.template) {
+    const userPackageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
+    const templateName = userPackageJson.zypin?.template;
+
+    if (!templateName) {
+      console.log(chalk.red('No zypin template configuration found in package.json.'));
+      console.log(chalk.gray('Make sure you created this project with "zypin create-project".'));
+      return;
+    }
+
+    // Determine which guide to show
+    let guideType = null;
+    if (options.write) {
+      guideType = 'write';
+    } else if (options.debugging) {
+      guideType = 'debug';
+    } else {
       utils.showGuideHelp();
       return;
     }
 
-    // Find template (support both short and full names)
-    let template = templateScanner.getTemplate(options.template);
+    // Find template
+    let template = templateScanner.getTemplate(templateName);
     if (!template) {
       const templates = templateScanner.getTemplates() || [];
-      template = templates.find(t => t.name === options.template);
+      template = templates.find(t => t.name === templateName);
     }
 
     if (!template) {
-      console.log(chalk.red(`Template '${options.template}' not found`));
-      console.log(chalk.gray('Available templates:'));
-      const templates = templateScanner.getTemplates() || [];
-      templates.forEach(t => {
-        console.log(chalk.gray(`  • ${t.namespacedName}`));
-      });
+      console.log(chalk.red(`Template '${templateName}' not found`));
       return;
     }
 
-    let guidePath = path.join(template.path, 'USER_MANUAL.md');
-    
-    // If not found in installed package, try source directory
-    if (!fs.existsSync(guidePath)) {
-      const sourcePath = path.join(__dirname, '..', '..', '..', 'zypin-selenium', 'templates', template.name, 'USER_MANUAL.md');
-      if (fs.existsSync(sourcePath)) {
-        guidePath = sourcePath;
-      }
-    }
+    // Determine guide file name
+    const guideFileName = guideType === 'write' ? 'WRITE_GUIDE.md' : 'DEBUG_GUIDE.md';
+    const guidePath = path.join(template.path, guideFileName);
     
     if (!fs.existsSync(guidePath)) {
-      console.log(chalk.red(`No guide found for template: ${template.namespacedName}`));
-      console.log(chalk.gray('Available guides:'));
-      const guidesWithGuides = utils.getGuidesWithManuals();
-      guidesWithGuides.forEach(t => {
-        console.log(chalk.gray(`  • ${t.namespacedName}`));
-      });
+      const guideTypeName = guideType === 'write' ? 'Writing' : 'Debugging';
+      console.log(chalk.red(`${guideTypeName} guide not available for this template`));
       return;
     }
 
