@@ -68,6 +68,23 @@ class TemplateManager {
       } else {
         console.log(chalk.gray('  zypin run --input test.js'));
       }
+      
+      // Check if template has a guide and suggest viewing it
+      let guidePath = path.join(template.path, 'USER_MANUAL.md');
+      
+      // If not found in installed package, try source directory
+      if (!await fs.pathExists(guidePath)) {
+        const sourcePath = path.join(__dirname, '..', '..', 'zypin-selenium', 'templates', template.name, 'USER_MANUAL.md');
+        if (await fs.pathExists(sourcePath)) {
+          guidePath = sourcePath;
+        }
+      }
+      
+      if (await fs.pathExists(guidePath)) {
+        console.log('');
+        console.log(chalk.blue('📚 View the guide:'));
+        console.log(chalk.gray(`  zypin guide --template ${template.namespacedName}`));
+      }
 
       return true;
     } catch (error) {
