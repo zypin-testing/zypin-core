@@ -762,6 +762,17 @@ healthCommand.action(async () => {
     }
   });
 
+// Helper function to get templates with guides
+function getGuidesWithManuals() {
+  const templates = templateScanner.getTemplates() || [];
+  return templates.filter(t => {
+    const fs = require('fs');
+    const installedPath = path.join(t.path, 'USER_MANUAL.md');
+    const sourcePath = path.join(__dirname, '..', 'zypin-selenium', 'templates', t.name, 'USER_MANUAL.md');
+    return fs.existsSync(installedPath) || fs.existsSync(sourcePath);
+  });
+}
+
 // Helper function to show guide help
 function showGuideHelp() {
   console.log(chalk.blue('📚 Zypin Guide Viewer'));
@@ -777,13 +788,7 @@ function showGuideHelp() {
   
   console.log(chalk.blue(' Available guides:'));
   console.log(chalk.gray('='.repeat(20)));
-  const templates = templateScanner.getTemplates();
-  const guidesWithGuides = templates.filter(t => {
-    const fs = require('fs');
-    const installedPath = path.join(t.path, 'USER_MANUAL.md');
-    const sourcePath = path.join(__dirname, '..', 'zypin-selenium', 'templates', t.name, 'USER_MANUAL.md');
-    return fs.existsSync(installedPath) || fs.existsSync(sourcePath);
-  });
+  const guidesWithGuides = getGuidesWithManuals();
   
   if (guidesWithGuides.length === 0) {
     console.log(chalk.gray('  No guides available.'));
@@ -817,13 +822,7 @@ guideCommand.action(async (options) => {
   }
 
   if (options.list) {
-    const templates = templateScanner.getTemplates();
-    const guidesWithGuides = templates.filter(t => {
-      const fs = require('fs');
-      const installedPath = path.join(t.path, 'USER_MANUAL.md');
-      const sourcePath = path.join(__dirname, '..', 'zypin-selenium', 'templates', t.name, 'USER_MANUAL.md');
-      return fs.existsSync(installedPath) || fs.existsSync(sourcePath);
-    });
+    const guidesWithGuides = getGuidesWithManuals();
     
     console.log(chalk.blue(' Available Guides:'));
     console.log(chalk.gray('='.repeat(25)));
@@ -851,14 +850,14 @@ guideCommand.action(async (options) => {
   // Find template (support both short and full names)
   let template = templateScanner.getTemplate(options.template);
   if (!template) {
-    const templates = templateScanner.getTemplates();
+    const templates = templateScanner.getTemplates() || [];
     template = templates.find(t => t.name === options.template);
   }
 
   if (!template) {
     console.log(chalk.red(`Template '${options.template}' not found`));
     console.log(chalk.gray('Available templates:'));
-    const templates = templateScanner.getTemplates();
+    const templates = templateScanner.getTemplates() || [];
     templates.forEach(t => {
       console.log(chalk.gray(`  • ${t.namespacedName}`));
     });
@@ -879,12 +878,7 @@ guideCommand.action(async (options) => {
   if (!fs.existsSync(guidePath)) {
     console.log(chalk.red(`No guide found for template: ${template.namespacedName}`));
     console.log(chalk.gray('Available guides:'));
-    const templates = templateScanner.getTemplates();
-    const guidesWithGuides = templates.filter(t => {
-      const installedPath = path.join(t.path, 'USER_MANUAL.md');
-      const sourcePath = path.join(__dirname, '..', 'zypin-selenium', 'templates', t.name, 'USER_MANUAL.md');
-      return fs.existsSync(installedPath) || fs.existsSync(sourcePath);
-    });
+    const guidesWithGuides = getGuidesWithManuals();
     guidesWithGuides.forEach(t => {
       console.log(chalk.gray(`  • ${t.namespacedName}`));
     });
