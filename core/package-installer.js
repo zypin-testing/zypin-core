@@ -54,9 +54,9 @@ class PackageInstaller {
     console.log(chalk.white(`  ${packageInfo.installCommand}`));
     console.log('');
     console.log(chalk.blue('📚 After installation:'));
-    console.log(chalk.gray('  1. Verify installation: zypin start --packages selenium'));
+    console.log(chalk.gray('  1. Verify installation: zypin start --packages <package>'));
     console.log(chalk.gray('  2. Check health: zypin health --server http://localhost:8421'));
-    console.log(chalk.gray('  3. Create project: zypin create-project my-tests --template selenium/basic-webdriver'));
+    console.log(chalk.gray('  3. Create project: zypin create-project my-tests --template <package>/<template>'));
     console.log('');
   }
 

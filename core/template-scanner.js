@@ -82,7 +82,8 @@ class TemplateScanner {
         path: templatePath,
         metadata: metadata,
         hasRunner: fs.existsSync(path.join(templatePath, 'runner.js')),
-        description: metadata.description || `${pluginName} ${templateName} template`
+        description: metadata.description || `${pluginName} ${templateName} template`,
+        help: metadata.zypin?.help || null
       };
 
       this.templates.set(namespacedName, templateInfo);

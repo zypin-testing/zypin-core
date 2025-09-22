@@ -147,12 +147,13 @@ class TemplateManager {
       packageJson.zypin = {
         package: packageName,
         template: templateName,
-        config: {
+        config: template.metadata.zypin?.config || {
           browser: 'chrome',
           headless: false,
           timeout: 30000,
           parallel: 1,
-          retries: 0
+          retries: 0,
+          windowSize: '1920x1080'
         }
       };
       
