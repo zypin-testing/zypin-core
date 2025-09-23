@@ -334,12 +334,14 @@ function showGuideHelp() {
   console.log(chalk.gray('='.repeat(15)));
   console.log(chalk.gray('  zypin guide --write      # Show writing guide'));
   console.log(chalk.gray('  zypin guide --debugging  # Show debugging guide'));
+  console.log(chalk.gray('  zypin guide --readme     # Show README'));
   console.log('');
   
   console.log(chalk.blue('📋 Available guides:'));
   console.log(chalk.gray('='.repeat(20)));
   console.log(chalk.gray('  • Writing Guide - How to write test code'));
   console.log(chalk.gray('  • Debugging Guide - How to debug and troubleshoot'));
+  console.log(chalk.gray('  • README - Template overview and quick start'));
   console.log('');
   
   console.log(chalk.gray('For more help: zypin --help'));

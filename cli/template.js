@@ -108,7 +108,8 @@ function setupCommands(program) {
     .command('guide')
     .description('View usage guides and documentation for templates')
     .option('--write', 'Show writing guide for current template')
-    .option('--debugging', 'Show debugging guide for current template');
+    .option('--debugging', 'Show debugging guide for current template')
+    .option('--readme', 'Show README for current template');
 
   guideCommand.helpInformation = function() {
     utils.showGuideHelp();
@@ -143,6 +144,8 @@ function setupCommands(program) {
       guideType = 'write';
     } else if (options.debugging) {
       guideType = 'debug';
+    } else if (options.readme) {
+      guideType = 'readme';
     } else {
       utils.showGuideHelp();
       return;
@@ -161,11 +164,22 @@ function setupCommands(program) {
     }
 
     // Determine guide file name
-    const guideFileName = guideType === 'write' ? 'WRITE_GUIDE.md' : 'DEBUG_GUIDE.md';
+    let guideFileName;
+    let guideTypeName;
+    if (guideType === 'write') {
+      guideFileName = 'WRITE_GUIDE.md';
+      guideTypeName = 'Writing';
+    } else if (guideType === 'debug') {
+      guideFileName = 'DEBUG_GUIDE.md';
+      guideTypeName = 'Debugging';
+    } else if (guideType === 'readme') {
+      guideFileName = 'README.md';
+      guideTypeName = 'README';
+    }
+    
     const guidePath = path.join(template.path, guideFileName);
     
     if (!fs.existsSync(guidePath)) {
-      const guideTypeName = guideType === 'write' ? 'Writing' : 'Debugging';
       console.log(chalk.red(`${guideTypeName} guide not available for this template`));
       return;
     }
