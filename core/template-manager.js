@@ -53,8 +53,8 @@ class TemplateManager {
       // Copy template files
       await this.copyTemplateFiles(template.path, fullTargetDir, projectName);
 
-      // Update package.json with project name and zypin config
-      await this.updatePackageJson(fullTargetDir, projectName, template.plugin, template.name);
+      // Update package.json with project name only (preserve template's zypin config)
+      await this.updatePackageJson(fullTargetDir, projectName);
 
       console.log(chalk.green(`✓ Project created successfully: ${projectName}`));
       console.log(chalk.gray(`Location: ${fullTargetDir}`));
@@ -62,11 +62,12 @@ class TemplateManager {
       console.log(chalk.gray(`  cd ${projectName}`));
       console.log(chalk.gray('  npm install'));
       
-      // Show template-specific run command
-      if (template.name === 'cucumber-bdd') {
-        console.log(chalk.gray('  zypin run --input features/'));
+      // Show template-specific run command from template help
+      const helpConfig = template.metadata?.zypin?.help;
+      if (helpConfig && helpConfig.examples && helpConfig.examples.length > 0) {
+        console.log(chalk.gray(`  ${helpConfig.examples[0]}`));
       } else {
-        console.log(chalk.gray('  zypin run --input test.js'));
+        console.log(chalk.gray('  zypin run --input <files>'));
       }
       
       // Check if template has a guide and suggest viewing it
@@ -128,34 +129,18 @@ class TemplateManager {
   }
 
   /**
-   * Update package.json with project name and zypin configuration
+   * Update package.json with project name only
    * @param {string} targetDir - Target directory
    * @param {string} projectName - Project name
-   * @param {string} packageName - Package name (e.g., "selenium")
-   * @param {string} templateName - Template name (e.g., "basic-webdriver")
    */
-  async updatePackageJson(targetDir, projectName, packageName, templateName) {
+  async updatePackageJson(targetDir, projectName) {
     const packageJsonPath = path.join(targetDir, 'package.json');
     
     if (await fs.pathExists(packageJsonPath)) {
       const packageJson = await fs.readJson(packageJsonPath);
       
-      // Update project name
+      // Only update project name - preserve all zypin configuration from template
       packageJson.name = projectName;
-      
-      // Add zypin configuration
-      packageJson.zypin = {
-        package: packageName,
-        template: templateName,
-        config: template.metadata.zypin?.config || {
-          browser: 'chrome',
-          headless: false,
-          timeout: 30000,
-          parallel: 1,
-          retries: 0,
-          windowSize: '1920x1080'
-        }
-      };
       
       await fs.writeJson(packageJsonPath, packageJson, { spaces: 2 });
     }

@@ -132,37 +132,18 @@ function setupCommands(program) {
     }
 
     if (!options.template) {
-      // Show available templates when no template specified
-      const availableTemplates = templateScanner.getTemplates();
-
-      console.log(chalk.blue('Available templates:'));
-      console.log(chalk.gray('='.repeat(30)));
-
-      if (availableTemplates.length === 0) {
-        console.log(chalk.yellow('No templates found'));
-        console.log(chalk.gray('Install packages with templates: npm install -g <package-url>'));
-      } else {
-        availableTemplates.forEach(template => {
-          console.log(`  ${chalk.green('●')} ${chalk.bold(template.namespacedName)}`);
-        });
-
-        console.log(chalk.gray('\nUsage: zypin create-project <name> --template <template>'));
-        console.log(chalk.gray('Example: zypin create-project my-tests --template <package>/<template>'));
-      }
+      // Use the consolidated help function from utils
+      utils.showCreateProjectHelp();
       return;
     }
 
     // Validate template exists
     const template = templateScanner.getTemplate(options.template);
     if (!template) {
-      const availableTemplates = templateScanner.getTemplates();
       console.log(chalk.red(`Template not found: ${options.template}`));
-      if (availableTemplates.length > 0) {
-        console.log(chalk.yellow('Available templates:'));
-        availableTemplates.forEach(t => {
-          console.log(`  ${chalk.gray('•')} ${t.namespacedName}`);
-        });
-      }
+      console.log('');
+      // Show available templates using consolidated function
+      utils.showCreateProjectHelp();
       return;
     }
 
