@@ -228,11 +228,10 @@ function setupCommands(program) {
     if (program.opts().debug) {
       process.env.ZYPIN_DEBUG = 'true';
       console.log(chalk.gray('Debug mode enabled'));
+      console.log(chalk.blue('🚀 Starting Zypin MCP Server...'));
+      console.log(chalk.gray('Browser automation via Model Context Protocol'));
+      console.log('');
     }
-
-    console.log(chalk.blue('🚀 Starting Zypin MCP Server...'));
-    console.log(chalk.gray('Browser automation via Model Context Protocol'));
-    console.log('');
 
     try {
       // Build command arguments for zypin-mcp
