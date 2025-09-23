@@ -14,11 +14,10 @@ const path = require('path');
 
 // Default framework configuration
 const defaultConfig = {
-  // Plugin discovery paths (scan both global and local node_modules)
+  // Plugin discovery paths (scan local node_modules)
   pluginPaths: [
-    path.join(process.env.npm_config_prefix || '/usr/local', 'lib', 'node_modules', '@zypin'),
-    path.join(process.cwd(), 'node_modules', '@zypin'),
-    path.join(__dirname, '..', 'node_modules', '@zypin')
+    path.join(__dirname, '..', 'node_modules', '@zypin'),
+    path.join(__dirname, '..', '..', '@zypin')
   ],
   logLevel: 'info',
   timeout: 30000,

@@ -8,7 +8,6 @@
  * - Validate plugin structure (start, run, health functions)
  * - Cache loaded plugins for performance
  * - Handle plugin loading errors gracefully
- * - Support both global and local plugin installation
  */
 
 const fs = require('fs-extra');
