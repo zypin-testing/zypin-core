@@ -1,0 +1,20 @@
+Zypin CLI Test Result
+Command: zypin create-project test-project --template selenium/cucumber-bdd --force
+Timestamp: Tue Sep 23 22:00:03 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+Creating project...
+Overwriting existing directory: /Users/tien.h.nguyen/Repositories/zypin-testing/zypin-core/test-project
+✓ Project created successfully: test-project
+Location: /Users/tien.h.nguyen/Repositories/zypin-testing/zypin-core/test-project
+Next steps:
+  cd test-project
+  npm install
+  zypin run --input features/
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:04 +07 2025

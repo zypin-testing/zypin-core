@@ -1,0 +1,29 @@
+Zypin CLI Test Result
+Command: zypin guide --help (template mode)
+Timestamp: Tue Sep 23 22:00:56 +07 2025
+Category: template-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+📚 Zypin Guide Viewer
+==============================
+View usage guides and documentation for current template
+
+💡 Usage:
+===============
+  zypin guide --write      # Show writing guide
+  zypin guide --debugging  # Show debugging guide
+  zypin guide --readme     # Show README
+
+📋 Available guides:
+====================
+  • Writing Guide - How to write test code
+  • Debugging Guide - How to debug and troubleshoot
+  • README - Template overview and quick start
+
+For more help: zypin --help
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:57 +07 2025

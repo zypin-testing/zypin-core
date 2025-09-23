@@ -1,0 +1,25 @@
+Zypin CLI Test Result
+Command: zypin (main help)
+Timestamp: Tue Sep 23 21:59:39 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+🚀 Zypin Global Mode
+==============================
+Zypin Testing Framework - Global Commands
+
+📋 Available Commands:
+=========================
+  start          Start testing packages and server
+  create-project Create a new test project from template
+  update         Update zypin framework and packages
+  health         Check health status of running packages
+  mcp            Start MCP server for browser automation
+
+For more help: zypin <command> --help
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 21:59:40 +07 2025

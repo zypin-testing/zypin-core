@@ -1,0 +1,16 @@
+Zypin CLI Test Result
+Command: zypin mcp --width 1920 --height 1080
+Timestamp: Tue Sep 23 22:00:25 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: true
+===========================================
+
+Starting Zypin MCP Server...
+Browser: chromium, Headless: true
+Viewport: 1920x1080
+Zypin MCP Server started successfully
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:27 +07 2025

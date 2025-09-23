@@ -1,0 +1,30 @@
+Zypin CLI Test Result
+Command: zypin --debug
+Timestamp: Tue Sep 23 22:00:34 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+Debug mode enabled
+Usage: zypin [options] [command]
+
+Tool-agnostic testing framework
+
+Options:
+  -V, --version                            output the version number
+  --server <url>                           Zypin server URL (e.g., http://server:8421)
+  --debug                                  Enable debug mode to show detailed output
+  -h, --help                               display help for command
+
+Commands:
+  start [options]                          Start testing packages and server
+  create-project [options] [project-name]  Create a new test project from a template
+  update                                   Update zypin framework and all @zypin packages to latest versions
+  mcp [options]                            Start MCP server for browser automation
+  health                                   Check health status of running packages
+  help [command]                           display help for command
+ERROR: Command failed with exit code 1
+
+===========================================
+End of test: Tue Sep 23 22:00:35 +07 2025

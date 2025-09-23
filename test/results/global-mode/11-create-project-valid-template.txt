@@ -1,0 +1,14 @@
+Zypin CLI Test Result
+Command: zypin create-project test-project --template selenium/cucumber-bdd
+Timestamp: Tue Sep 23 22:00:02 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+Creating project...
+Failed to create project: Directory already exists: /Users/tien.h.nguyen/Repositories/zypin-testing/zypin-core/test-project. Use --force to overwrite.
+ERROR: Command failed with exit code 1
+
+===========================================
+End of test: Tue Sep 23 22:00:03 +07 2025

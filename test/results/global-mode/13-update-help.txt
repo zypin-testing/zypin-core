@@ -1,0 +1,18 @@
+Zypin CLI Test Result
+Command: zypin update --help
+Timestamp: Tue Sep 23 22:00:04 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+Usage: zypin update [options]
+
+Update zypin framework and all @zypin packages to latest versions
+
+Options:
+  -h, --help  display help for command
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:05 +07 2025

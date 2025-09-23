@@ -1,0 +1,21 @@
+Zypin CLI Test Result
+Command: zypin update
+Timestamp: Tue Sep 23 22:00:05 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+🔄 Updating Zypin Framework...
+========================================
+📋 Current versions:
+  • zypin-core: 0.1.0
+  • @zypin/selenium: 0.1.0
+  • zypin-mcp: 1.0.0
+
+📦 Updating core package and dependencies...
+TIMEOUT: Command timed out after 10 seconds
+
+===========================================
+End of test: Tue Sep 23 22:00:17 +07 2025
+  ❌ Failed to update core package

@@ -1,0 +1,14 @@
+Zypin CLI Test Result
+Command: zypin start --packages selenium
+Timestamp: Tue Sep 23 21:59:54 +07 2025
+Category: global-mode
+Timeout: 15s
+Long-running: true
+===========================================
+
+Zypin server is already running
+Server running on http://localhost:8421
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 21:59:56 +07 2025

@@ -1,0 +1,39 @@
+Zypin CLI Test Result
+Command: zypin health (no server)
+Timestamp: Tue Sep 23 22:00:30 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+🏥 Zypin Health Checker
+==============================
+Check health status of running packages on remote server
+
+💡 Usage Examples:
+====================
+  zypin health --server http://localhost:8421
+  zypin health --server http://remote-server:8421
+  zypin health --server http://192.168.1.100:8421
+
+🔧 Options:
+===============
+  --server <url>        Zypin server URL (required)
+  --debug               Enable debug mode
+
+📚 Next Steps:
+===============
+  1. Start server:    zypin start --packages <package>
+  2. Check health:    zypin health --server http://localhost:8421
+
+🔍 What it shows:
+====================
+  • Number of running packages
+  • Package names and PIDs
+  • Start times and status
+
+For more help: zypin --help
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:31 +07 2025

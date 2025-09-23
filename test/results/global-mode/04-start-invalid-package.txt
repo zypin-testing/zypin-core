@@ -1,0 +1,21 @@
+Zypin CLI Test Result
+Command: zypin start --packages invalid-package
+Timestamp: Tue Sep 23 21:59:42 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+Starting Zypin server...
+info: Zypin server running on port 8421
+✓ Server running on port 8421
+Package 'invalid-package' not found
+❌ Unknown package: invalid-package
+Available packages:
+  • selenium - Selenium Grid integration for web testing
+Started 0 of 1 packages
+TIMEOUT: Command timed out after 10 seconds
+
+===========================================
+End of test: Tue Sep 23 21:59:54 +07 2025
+info: Server stopped

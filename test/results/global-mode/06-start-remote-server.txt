@@ -1,0 +1,15 @@
+Zypin CLI Test Result
+Command: zypin start --server http://remote:8421
+Timestamp: Tue Sep 23 21:59:56 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+Remote start not supported. Please SSH to server:
+ssh user@remote
+zypin start --packages <package>
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 21:59:58 +07 2025

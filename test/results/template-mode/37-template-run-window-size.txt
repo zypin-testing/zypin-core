@@ -1,0 +1,24 @@
+Zypin CLI Test Result
+Command: zypin run --input test/features/step-definitions-test.feature --window-size 1920x1080
+Timestamp: Tue Sep 23 22:00:53 +07 2025
+Category: template-mode
+Timeout: 30s
+Long-running: true
+===========================================
+
+🔍 Detecting template...
+Template detected: cucumber-bdd
+🔧 Merging configuration...
+🚀 Executing tests...
+Running Cucumber BDD tests...
+Configuration: browser=chrome, headless=false, timeout=30000ms
+🔍 Processing input for template: cucumber-bdd
+Warning: Input not found: test/features/step-definitions-test.feature
+✓ Found 0 file(s) to process
+❌ Test execution failed: No feature files found to execute
+
+❌ No feature files found to execute
+ERROR: Command failed with exit code 1
+
+===========================================
+End of test: Tue Sep 23 22:00:56 +07 2025

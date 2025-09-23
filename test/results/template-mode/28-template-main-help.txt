@@ -1,0 +1,22 @@
+Zypin CLI Test Result
+Command: zypin (template mode - main help)
+Timestamp: Tue Sep 23 22:00:37 +07 2025
+Category: template-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+🧪 Zypin Template Mode
+==============================
+You are in a Zypin project directory
+
+📋 Available Commands:
+=========================
+  run     Run tests using detected template
+  guide   View template guides and documentation
+
+For more help: zypin <command> --help
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:38 +07 2025

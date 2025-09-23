@@ -1,0 +1,27 @@
+Zypin CLI Test Result
+Command: zypin --debug (template mode)
+Timestamp: Tue Sep 23 22:01:01 +07 2025
+Category: template-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+Debug mode enabled
+Usage: zypin [options] [command]
+
+Tool-agnostic testing framework
+
+Options:
+  -V, --version    output the version number
+  --server <url>   Zypin server URL (e.g., http://server:8421)
+  --debug          Enable debug mode to show detailed output
+  -h, --help       display help for command
+
+Commands:
+  run [options]    Run tests using detected template
+  guide [options]  View usage guides and documentation for templates
+  help [command]   display help for command
+ERROR: Command failed with exit code 1
+
+===========================================
+End of test: Tue Sep 23 22:01:02 +07 2025

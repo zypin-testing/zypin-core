@@ -1,0 +1,13 @@
+Zypin CLI Test Result
+Command: zypin --version
+Timestamp: Tue Sep 23 22:00:36 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+0.1.0
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:37 +07 2025

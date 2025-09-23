@@ -1,0 +1,55 @@
+Zypin CLI Test Summary
+Generated on: Tue Sep 23 21:59:39 +07 2025
+Status,Description,Category,Filename
+===========================================
+SUCCESS,zypin (main help),global-mode,01-main-help
+SUCCESS,zypin start --help,global-mode,02-start-help
+SUCCESS,zypin start (no packages),global-mode,03-start-no-packages
+TIMEOUT,zypin start --packages invalid-package,global-mode,04-start-invalid-package
+SUCCESS,zypin start --packages selenium,global-mode,05-start-valid-package
+SUCCESS,zypin start --server http://remote:8421,global-mode,06-start-remote-server
+SUCCESS,zypin create-project --help,global-mode,07-create-project-help
+SUCCESS,zypin create-project (no name),global-mode,08-create-project-no-name
+SUCCESS,zypin create-project test-project (no template),global-mode,09-create-project-no-template
+SUCCESS,zypin create-project test-project --template invalid/template,global-mode,10-create-project-invalid-template
+FAILED,zypin create-project test-project --template selenium/cucumber-bdd,global-mode,11-create-project-valid-template
+SUCCESS,zypin create-project test-project --template selenium/cucumber-bdd --force,global-mode,12-create-project-with-force
+SUCCESS,zypin update --help,global-mode,13-update-help
+TIMEOUT,zypin update,global-mode,14-update-execution
+SUCCESS,zypin mcp --help,global-mode,15-mcp-help
+SUCCESS,zypin mcp (default options),global-mode,16-mcp-default
+SUCCESS,zypin mcp --browser firefox,global-mode,17-mcp-browser
+SUCCESS,zypin mcp --headed,global-mode,18-mcp-headed
+SUCCESS,zypin mcp --width 1920 --height 1080,global-mode,19-mcp-size
+SUCCESS,zypin mcp --timeout 60000,global-mode,20-mcp-timeout
+SUCCESS,zypin health --help,global-mode,21-health-help
+SUCCESS,zypin health (no server),global-mode,22-health-no-server
+SUCCESS,zypin health --server http://localhost:8421,global-mode,23-health-valid-server
+SUCCESS,zypin health --server http://invalid:8421,global-mode,24-health-invalid-server
+FAILED,zypin --debug,global-mode,25-global-debug
+FAILED,zypin --server http://remote:8421,global-mode,26-global-server
+SUCCESS,zypin --version,global-mode,27-version
+SUCCESS,zypin (template mode - main help),template-mode,28-template-main-help
+SUCCESS,zypin run --help (template mode),template-mode,29-template-run-help
+SUCCESS,zypin run (no input),template-mode,30-template-run-no-input
+FAILED,zypin run --input test/features/step-definitions-test.feature,template-mode,31-template-run-with-input
+FAILED,zypin run --input test/features/step-definitions-test.feature --browser chrome,template-mode,32-template-run-browser
+FAILED,zypin run --input test/features/step-definitions-test.feature --headless,template-mode,33-template-run-headless
+FAILED,zypin run --input test/features/step-definitions-test.feature --timeout 30000,template-mode,34-template-run-timeout
+FAILED,zypin run --input test/features/step-definitions-test.feature --parallel 2,template-mode,35-template-run-parallel
+FAILED,zypin run --input test/features/step-definitions-test.feature --retries 3,template-mode,36-template-run-retries
+FAILED,zypin run --input test/features/step-definitions-test.feature --window-size 1920x1080,template-mode,37-template-run-window-size
+SUCCESS,zypin guide --help (template mode),template-mode,38-template-guide-help
+SUCCESS,zypin guide (no options),template-mode,39-template-guide-no-options
+SUCCESS,zypin guide --write,template-mode,40-template-guide-write
+SUCCESS,zypin guide --debugging,template-mode,41-template-guide-debugging
+SUCCESS,zypin guide --readme,template-mode,42-template-guide-readme
+FAILED,zypin --debug (template mode),template-mode,43-template-debug
+FAILED,zypin --server http://remote:8421 (template mode),template-mode,44-template-server
+FAILED,zypin invalid-command (global mode),error-cases,45-invalid-command-global
+FAILED,zypin invalid-command (template mode),error-cases,46-invalid-command-template
+FAILED,zypin run outside project (template mode),error-cases,47-run-outside-project
+FAILED,zypin run without package.json,error-cases,48-run-no-package-json
+FAILED,zypin run with invalid package.json,error-cases,49-run-invalid-package-json
+FAILED,zypin run without zypin config,error-cases,50-run-no-zypin-config
+SUCCESS,zypin run with invalid template,error-cases,51-run-invalid-template

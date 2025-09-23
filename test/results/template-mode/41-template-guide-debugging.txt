@@ -1,0 +1,669 @@
+Zypin CLI Test Result
+Command: zypin guide --debugging
+Timestamp: Tue Sep 23 22:00:59 +07 2025
+Category: template-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+# Zypin Cucumber - Debugging Guide
+
+A comprehensive guide to debugging and troubleshooting tests using Zypin's Cucumber framework.
+
+## Table of Contents
+
+1. [Common Issues](#common-issues)
+2. [Debugging Techniques](#debugging-techniques)
+3. [Browser Debugging](#browser-debugging)
+4. [Log Analysis](#log-analysis)
+5. [Performance Debugging](#performance-debugging)
+6. [Error Resolution](#error-resolution)
+7. [Advanced Debugging](#advanced-debugging)
+
+---
+
+## Common Issues
+
+### 1. Element Not Found Errors
+
+#### Problem: `Element .selector not found within 30000ms timeout`
+
+**Causes:**
+- Incorrect selector
+- Element not yet loaded
+- Element not visible
+- Dynamic content not ready
+
+**Solutions:**
+```gherkin
+# Add explicit wait before interaction
+When I wait for ".button" to be visible
+And I click on ".button"
+
+# Use different selector strategy
+When I click on element with id "submit-btn"  # Instead of CSS selector
+When I click on element with name "submit"    # Instead of CSS selector
+```
+
+**Debug Steps:**
+1. Check if element exists in browser dev tools
+2. Verify selector syntax
+3. Add explicit waits
+4. Try alternative selectors
+
+### 2. Text Not Found Errors
+
+#### Problem: `Expected to see "text" in .selector, but found: "actual text"`
+
+**Causes:**
+- Exact text mismatch
+- Whitespace differences
+- Dynamic text content
+- Case sensitivity
+
+**Solutions:**
+```gherkin
+# Use partial text matching
+Then I should see "Welcome" in ".message"  # Instead of exact "Welcome, John!"
+
+# Check for text content variations
+Then I should see "Success" in ".status"   # Instead of "Operation successful"
+```
+
+**Debug Steps:**
+1. Inspect actual text content in browser
+2. Check for hidden characters or whitespace
+3. Use partial text matching
+4. Verify text is not dynamically generated
+
+### 3. Timing Issues
+
+#### Problem: Element found but interaction fails
+
+**Causes:**
+- Element not clickable
+- Element covered by another element
+- JavaScript not ready
+- Animation in progress
+
+**Solutions:**
+```gherkin
+# Wait for element to be ready
+When I wait for ".button" to be visible
+And I wait for "1" seconds  # Allow for animations
+And I click on ".button"
+
+# Use JavaScript interaction
+When I execute JavaScript "document.querySelector('.button').click()"
+```
+
+**Debug Steps:**
+1. Check if element is clickable
+2. Verify no overlapping elements
+3. Wait for animations to complete
+4. Use JavaScript execution as fallback
+
+### 4. XPath Issues
+
+#### Problem: Invalid XPath expression or element not found
+
+**Causes:**
+- Incorrect XPath syntax
+- Complex XPath expressions
+- Dynamic content changes
+
+**Solutions:**
+```gherkin
+# Use simple XPath
+When I click on element with xpath "//button[@type='submit']"
+
+# Avoid complex XPath
+# When I click on element with xpath "//div[@class='form']//div[@class='button-group']//button[@type='submit' and @class='primary']"
+```
+
+**Debug Steps:**
+1. Test XPath in browser dev tools
+2. Use simpler XPath expressions
+3. Consider CSS selectors instead
+4. Verify XPath syntax
+
+---
+
+## Debugging Techniques
+
+### 1. Screenshot Debugging
+
+#### Take Screenshots on Failure
+```javascript
+// features/support/hooks.js
+const { After } = require('@cucumber/cucumber');
+
+After(async function(scenario) {
+  if (scenario.result.status === 'FAILED') {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    await browser.screenshot({ 
+      path: `screenshots/failure-${scenario.pickle.name}-${timestamp}.png` 
+    });
+  }
+});
+```
+
+#### Take Screenshots at Key Points
+```gherkin
+# In your feature files
+When I take a screenshot named "before-login"
+And I click on "#login-button"
+When I take a screenshot named "after-login"
+```
+
+### 2. Console Logging
+
+#### Add Debug Information
+```javascript
+// features/step-definitions/debug.steps.js
+When('I debug the current page', async () => {
+  const title = await browser.title();
+  const url = await browser.url();
+  const elements = await browser.$$('.debug-info');
+  
+  console.log('Page Title:', title);
+  console.log('Current URL:', url);
+  console.log('Debug Elements Found:', elements.length);
+});
+```
+
+#### Use Browser Console
+```javascript
+// Execute JavaScript for debugging
+When('I check page state', async () => {
+  const pageState = await browser.evaluate(() => {
+    return {
+      readyState: document.readyState,
+      elementCount: document.querySelectorAll('*').length,
+      hasErrors: document.querySelectorAll('.error').length > 0
+    };
+  });
+  console.log('Page State:', pageState);
+});
+```
+
+### 3. Element Inspection
+
+#### Check Element Properties
+```javascript
+// features/step-definitions/inspection.steps.js
+When('I inspect element {string}', async (selector) => {
+  const element = await browser.$(selector);
+  if (element) {
+    const properties = await element.evaluate(el => ({
+      visible: el.offsetParent !== null,
+      enabled: !el.disabled,
+      text: el.textContent,
+      classes: el.className,
+      id: el.id
+    }));
+    console.log('Element Properties:', properties);
+  } else {
+    console.log('Element not found:', selector);
+  }
+});
+```
+
+### 4. Network Monitoring
+
+#### Check Network Requests
+```javascript
+// features/support/network-debug.js
+async function monitorNetwork() {
+  const requests = [];
+  
+  browser.on('request', request => {
+    requests.push({
+      url: request.url(),
+      method: request.method(),
+      timestamp: new Date().toISOString()
+    });
+  });
+  
+  browser.on('response', response => {
+    const request = requests.find(r => r.url === response.url());
+    if (request) {
+      request.status = response.status();
+      request.statusText = response.statusText();
+    }
+  });
+  
+  return requests;
+}
+```
+
+---
+
+## Browser Debugging
+
+### 1. Browser Dev Tools Integration
+
+#### Run Tests in Headed Mode
+```bash
+# Run with visible browser for debugging
+zypin run --input features/ --browser chrome
+# (headless mode is disabled by default for debugging)
+```
+
+#### Use Browser Dev Tools
+1. Open browser dev tools (F12)
+2. Inspect elements and selectors
+3. Test JavaScript commands
+4. Monitor network requests
+5. Check console for errors
+
+### 2. Element Selector Testing
+
+#### Test Selectors in Browser Console
+```javascript
+// Test CSS selectors
+document.querySelector('.button')
+document.querySelectorAll('.form input')
+
+// Test XPath
+document.evaluate('//button[@type="submit"]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+
+// Test element properties
+element.offsetParent !== null  // Check if visible
+element.disabled               // Check if enabled
+element.textContent            // Get text content
+```
+
+### 3. JavaScript Execution
+
+#### Execute Custom JavaScript
+```gherkin
+# Execute JavaScript for debugging
+When I execute JavaScript "console.log('Current URL:', window.location.href)"
+And I execute JavaScript "console.log('Page Title:', document.title)"
+And I execute JavaScript "console.log('Elements with class button:', document.querySelectorAll('.button').length)"
+```
+
+#### Get Page Information
+```javascript
+// features/step-definitions/page-info.steps.js
+When('I get page information', async () => {
+  const pageInfo = await browser.evaluate(() => ({
+    url: window.location.href,
+    title: document.title,
+    readyState: document.readyState,
+    elementCount: document.querySelectorAll('*').length,
+    formCount: document.querySelectorAll('form').length,
+    buttonCount: document.querySelectorAll('button').length
+  }));
+  console.log('Page Information:', pageInfo);
+});
+```
+
+---
+
+## Log Analysis
+
+### 1. Enable Debug Logging
+
+#### Set Debug Environment
+```bash
+# Enable debug mode
+export ZYPIN_DEBUG=true
+zypin run --input features/
+
+# Or use debug flag
+zypin run --input features/ --debug
+```
+
+#### Configure Logging Levels
+```javascript
+// features/support/logging.js
+const logLevels = {
+  ERROR: 0,
+  WARN: 1,
+  INFO: 2,
+  DEBUG: 3
+};
+
+function log(level, message, data = null) {
+  if (logLevels[level] <= logLevels[process.env.LOG_LEVEL || 'INFO']) {
+    console.log(`[${level}] ${message}`, data || '');
+  }
+}
+```
+
+### 2. Test Execution Logs
+
+#### Monitor Test Progress
+```javascript
+// features/support/progress-monitor.js
+const { Before, After } = require('@cucumber/cucumber');
+
+Before(async function(scenario) {
+  console.log(`\n🧪 Starting: ${scenario.pickle.name}`);
+  console.log(`📍 Location: ${scenario.pickle.uri}:${scenario.pickle.locations[0].line}`);
+});
+
+After(async function(scenario) {
+  const status = scenario.result.status;
+  const emoji = status === 'PASSED' ? '✅' : status === 'FAILED' ? '❌' : '⚠️';
+  console.log(`${emoji} Finished: ${scenario.pickle.name} (${status})`);
+});
+```
+
+### 3. Error Logging
+
+#### Capture Detailed Errors
+```javascript
+// features/support/error-handler.js
+const { After } = require('@cucumber/cucumber');
+
+After(async function(scenario) {
+  if (scenario.result.status === 'FAILED') {
+    const error = scenario.result.exception;
+    console.log('\n❌ Test Failed:');
+    console.log(`   Scenario: ${scenario.pickle.name}`);
+    console.log(`   Error: ${error.message}`);
+    console.log(`   Stack: ${error.stack}`);
+    
+    // Log browser state
+    const url = await browser.url();
+    const title = await browser.title();
+    console.log(`   URL: ${url}`);
+    console.log(`   Title: ${title}`);
+  }
+});
+```
+
+---
+
+## Performance Debugging
+
+### 1. Test Execution Time
+
+#### Measure Test Duration
+```javascript
+// features/support/performance-monitor.js
+const { Before, After } = require('@cucumber/cucumber');
+
+Before(async function(scenario) {
+  this.startTime = Date.now();
+});
+
+After(async function(scenario) {
+  const duration = Date.now() - this.startTime;
+  console.log(`⏱️  Duration: ${duration}ms`);
+  
+  if (duration > 30000) { // 30 seconds
+    console.log('⚠️  Slow test detected (>30s)');
+  }
+});
+```
+
+### 2. Browser Performance
+
+#### Monitor Browser Metrics
+```javascript
+// features/step-definitions/performance.steps.js
+When('I check browser performance', async () => {
+  const metrics = await browser.evaluate(() => {
+    const navigation = performance.getEntriesByType('navigation')[0];
+    return {
+      loadTime: navigation.loadEventEnd - navigation.loadEventStart,
+      domContentLoaded: navigation.domContentLoadedEventEnd - navigation.domContentLoadedEventStart,
+      firstPaint: performance.getEntriesByType('paint')[0]?.startTime || 0
+    };
+  });
+  console.log('Browser Performance:', metrics);
+});
+```
+
+### 3. Network Performance
+
+#### Monitor Network Requests
+```javascript
+// features/support/network-monitor.js
+async function trackNetworkPerformance() {
+  const requests = [];
+  
+  browser.on('request', request => {
+    requests.push({
+      url: request.url(),
+      startTime: Date.now()
+    });
+  });
+  
+  browser.on('response', response => {
+    const request = requests.find(r => r.url === response.url());
+    if (request) {
+      request.duration = Date.now() - request.startTime;
+      if (request.duration > 5000) { // 5 seconds
+        console.log(`🐌 Slow request: ${request.url} (${request.duration}ms)`);
+      }
+    }
+  });
+}
+```
+
+---
+
+## Error Resolution
+
+### 1. Common Error Patterns
+
+#### Timeout Errors
+```gherkin
+# Problem: Element not found within timeout
+# Solution: Increase timeout or add explicit wait
+When I wait for ".loading" to be visible
+And I wait for "10" seconds
+And I click on ".button"
+```
+
+#### Stale Element Errors
+```gherkin
+# Problem: Element reference becomes stale
+# Solution: Re-find element before interaction
+When I wait for ".dynamic-content" to be visible
+And I click on ".button"  # Re-find element
+```
+
+#### JavaScript Errors
+```gherkin
+# Problem: JavaScript execution fails
+# Solution: Check for JavaScript errors
+When I execute JavaScript "console.log('Page ready:', document.readyState)"
+```
+
+### 2. Error Recovery
+
+#### Retry Failed Steps
+```javascript
+// features/support/retry.js
+const { retry } = require('@cucumber/cucumber');
+
+retry({
+  retries: 3,
+  retryCondition: (error) => {
+    return error.message.includes('timeout') || 
+           error.message.includes('not found');
+  }
+});
+```
+
+#### Fallback Strategies
+```javascript
+// features/step-definitions/robust.steps.js
+When('I click on element {string} with fallback', async (selector) => {
+  try {
+    await browser.click(selector);
+  } catch (error) {
+    console.log('Primary selector failed, trying fallback...');
+    try {
+      await browser.click(`[data-testid="${selector}"]`);
+    } catch (fallbackError) {
+      console.log('Fallback failed, using JavaScript...');
+      await browser.evaluate((sel) => {
+        document.querySelector(sel).click();
+      }, selector);
+    }
+  }
+});
+```
+
+### 3. Environment-Specific Issues
+
+#### Handle Different Environments
+```javascript
+// features/support/environment.js
+const config = {
+  development: {
+    baseUrl: 'http://localhost:3000',
+    timeout: 10000
+  },
+  staging: {
+    baseUrl: 'https://staging.example.com',
+    timeout: 30000
+  },
+  production: {
+    baseUrl: 'https://app.example.com',
+    timeout: 60000
+  }
+};
+
+const env = process.env.NODE_ENV || 'development';
+module.exports = config[env];
+```
+
+---
+
+## Advanced Debugging
+
+### 1. Custom Debug Tools
+
+#### Create Debug Helper
+```javascript
+// features/support/debug-helper.js
+class DebugHelper {
+  static async capturePageState() {
+    return await browser.evaluate(() => ({
+      url: window.location.href,
+      title: document.title,
+      readyState: document.readyState,
+      elements: {
+        buttons: document.querySelectorAll('button').length,
+        inputs: document.querySelectorAll('input').length,
+        forms: document.querySelectorAll('form').length
+      },
+      errors: document.querySelectorAll('.error').length
+    }));
+  }
+  
+  static async waitForCondition(condition, timeout = 30000) {
+    return await browser.waitForFunction(condition, { timeout });
+  }
+  
+  static async highlightElement(selector) {
+    await browser.evaluate((sel) => {
+      const element = document.querySelector(sel);
+      if (element) {
+        element.style.border = '3px solid red';
+        element.style.backgroundColor = 'yellow';
+      }
+    }, selector);
+  }
+}
+```
+
+### 2. Test Data Debugging
+
+#### Validate Test Data
+```javascript
+// features/support/data-debug.js
+function validateTestData(data) {
+  const errors = [];
+  
+  if (!data.email || !data.email.includes('@')) {
+    errors.push('Invalid email format');
+  }
+  
+  if (!data.password || data.password.length < 6) {
+    errors.push('Password too short');
+  }
+  
+  if (errors.length > 0) {
+    console.log('Test Data Validation Errors:', errors);
+    throw new Error(`Invalid test data: ${errors.join(', ')}`);
+  }
+}
+```
+
+### 3. Integration Debugging
+
+#### API Response Debugging
+```javascript
+// features/step-definitions/api-debug.steps.js
+When('I debug API response for {string}', async (endpoint) => {
+  const response = await fetch(endpoint);
+  const data = await response.json();
+  
+  console.log('API Response:', {
+    status: response.status,
+    statusText: response.statusText,
+    data: data
+  });
+  
+  if (!response.ok) {
+    throw new Error(`API call failed: ${response.status} ${response.statusText}`);
+  }
+});
+```
+
+---
+
+## Debugging Checklist
+
+### Before Running Tests
+- [ ] Check if application is running
+- [ ] Verify test data is available
+- [ ] Ensure database is in correct state
+- [ ] Check network connectivity
+
+### During Test Execution
+- [ ] Monitor console for errors
+- [ ] Check browser dev tools
+- [ ] Take screenshots on failures
+- [ ] Log important state changes
+
+### After Test Failure
+- [ ] Review error messages
+- [ ] Check screenshots
+- [ ] Analyze logs
+- [ ] Verify selectors in browser
+- [ ] Test steps manually
+
+### Performance Issues
+- [ ] Check test execution time
+- [ ] Monitor network requests
+- [ ] Verify browser performance
+- [ ] Check for memory leaks
+
+---
+
+## Conclusion
+
+This debugging guide provides comprehensive techniques for troubleshooting and resolving issues in your Zypin Cucumber tests. Remember to:
+
+- Use screenshots and logging for visual debugging
+- Test selectors in browser dev tools
+- Monitor performance and network requests
+- Implement robust error handling
+- Use fallback strategies for flaky elements
+
+For writing help, use `zypin guide --write` to access the writing guide.
+
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:01:00 +07 2025

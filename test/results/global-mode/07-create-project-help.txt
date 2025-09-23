@@ -1,0 +1,41 @@
+Zypin CLI Test Result
+Command: zypin create-project --help
+Timestamp: Tue Sep 23 21:59:58 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+🚀 Zypin Project Creator
+========================================
+Create a new test project from available templates
+
+📋 Available Templates:
+=========================
+  ● selenium/basic-webdriver
+    Package: selenium | Template: basic-webdriver
+    Basic WebDriver test project created with Zypin Framework
+  ● selenium/cucumber-bdd
+    Package: selenium | Template: cucumber-bdd
+    Cucumber BDD test project created with Zypin Framework
+
+💡 Usage Examples:
+====================
+  zypin create-project my-tests --template <package>/<template>
+
+🔧 Options:
+===============
+  --template <template>  Template to use (required)
+  --force               Overwrite existing directory
+
+📚 Next Steps:
+===============
+  1. Create project: zypin create-project <name> --template <template>
+  2. Install deps:   cd <project> && npm install
+  3. Learn to run:   zypin run --help
+
+For more help: zypin --help
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 21:59:59 +07 2025

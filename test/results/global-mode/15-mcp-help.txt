@@ -1,0 +1,45 @@
+Zypin CLI Test Result
+Command: zypin mcp --help
+Timestamp: Tue Sep 23 22:00:17 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+🤖 Zypin MCP Server
+=========================
+Start MCP server for browser automation via Model Context Protocol
+
+💡 Usage Examples:
+====================
+  zypin mcp
+  zypin mcp --browser firefox --headed
+  zypin mcp --browser webkit --width 1920 --height 1080
+  zypin mcp --timeout 60000
+
+🔧 Options:
+===============
+  -b, --browser <browser>  Browser to use (chromium, firefox, webkit) [default: chromium]
+  --headed                Run browser in headed mode (visible)
+  -w, --width <width>     Viewport width [default: 1280]
+  -l, --height <height>   Viewport height [default: 720]
+  -t, --timeout <ms>      Default timeout in milliseconds [default: 30000]
+
+📚 Next Steps:
+===============
+  1. Start MCP server: zypin mcp
+  2. Connect AI tools: Use MCP protocol to connect
+  3. Automate browser: Send commands via MCP
+
+🔍 What it does:
+====================
+  • Starts Model Context Protocol server
+  • Provides browser automation capabilities
+  • Enables AI tools to control browsers
+  • Supports multiple browsers and configurations
+
+For more help: zypin --help
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:18 +07 2025

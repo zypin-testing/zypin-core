@@ -1,0 +1,44 @@
+Zypin CLI Test Result
+Command: zypin run --help (template mode)
+Timestamp: Tue Sep 23 22:00:38 +07 2025
+Category: template-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+🧪 Zypin Test Runner
+==============================
+Run tests using detected template from package.json
+
+📋 Current Project:
+====================
+  Package: selenium
+  Template: cucumber-bdd
+
+💡 Usage Examples:
+====================
+  zypin run --input features/
+  zypin run --input features/demo.feature
+  zypin run --input features/login.feature,features/checkout.feature
+
+🔧 Configuration Options:
+=========================
+  --input <files>        Test files or directories to run (required)
+  --browser <browser>     Browser (chrome, firefox, safari, edge)
+  --headless             Run in headless mode
+  --timeout <ms>         Test timeout in milliseconds
+  --parallel <number>    Number of parallel executions
+  --retries <number>     Number of retries for failed tests
+  --window-size <size>   Browser window size (WIDTHxHEIGHT)
+
+📚 Next Steps:
+===============
+  1. Start servers: zypin start --packages <package>
+  2. Run tests: zypin run --input features/
+  3. Run with options: zypin run --input features/ --browser firefox --headless
+
+For more help: zypin --help
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:39 +07 2025

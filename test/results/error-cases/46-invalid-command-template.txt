@@ -1,0 +1,13 @@
+Zypin CLI Test Result
+Command: zypin invalid-command (template mode)
+Timestamp: Tue Sep 23 22:01:04 +07 2025
+Category: error-cases
+Timeout: 10s
+Long-running: false
+===========================================
+
+error: unknown command 'invalid-command'
+ERROR: Command failed with exit code 1
+
+===========================================
+End of test: Tue Sep 23 22:01:05 +07 2025

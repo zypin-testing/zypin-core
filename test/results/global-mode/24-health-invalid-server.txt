@@ -1,0 +1,14 @@
+Zypin CLI Test Result
+Command: zypin health --server http://invalid:8421
+Timestamp: Tue Sep 23 22:00:33 +07 2025
+Category: global-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+Zypin server is not running
+Use "zypin start" to start the server first
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:34 +07 2025

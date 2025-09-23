@@ -1,0 +1,487 @@
+Zypin CLI Test Result
+Command: zypin guide --write
+Timestamp: Tue Sep 23 22:00:58 +07 2025
+Category: template-mode
+Timeout: 10s
+Long-running: false
+===========================================
+
+# Zypin Cucumber - Writing Guide
+
+A comprehensive guide to writing effective test code using Zypin's Cucumber framework.
+
+## Table of Contents
+
+1. [Getting Started](#getting-started)
+2. [Writing Feature Files](#writing-feature-files)
+3. [Step Definitions](#step-definitions)
+4. [Test Data Management](#test-data-management)
+5. [Code Organization](#code-organization)
+6. [Best Practices](#best-practices)
+7. [Advanced Patterns](#advanced-patterns)
+
+---
+
+## Getting Started
+
+### Project Structure
+```
+your-project/
+├── features/
+│   ├── step-definitions/
+│   │   └── index.js
+│   ├── support/
+│   │   └── world.js
+│   └── your-feature.feature
+├── package.json
+└── runner.js
+```
+
+### Basic Setup
+1. Create your feature file in the `features/` directory
+2. Write step definitions in `features/step-definitions/`
+3. Configure test data in `features/support/`
+4. Run tests with `zypin run --input features/`
+
+---
+
+## Writing Feature Files
+
+### Feature Structure
+```gherkin
+Feature: User Authentication
+  As a user
+  I want to log into the application
+  So that I can access my account
+
+  Background:
+    Given I navigate to "https://app.example.com/login"
+
+  Scenario: Successful login
+    When I enter "john@example.com" in "#email"
+    And I enter "password123" in "#password"
+    And I click on "#login-button"
+    Then I should see the page title contains "Dashboard"
+    And I should see "Welcome, John!" in ".welcome-message"
+
+  Scenario: Invalid credentials
+    When I enter "invalid@email.com" in "#email"
+    And I enter "wrongpassword" in "#password"
+    And I click on "#login-button"
+    Then I should see "Invalid credentials" in ".error-message"
+```
+
+### Writing Effective Scenarios
+
+#### 1. Use Clear, Descriptive Names
+```gherkin
+# Good
+Scenario: User can reset password with valid email
+
+# Avoid
+Scenario: Reset password
+```
+
+#### 2. Follow Given-When-Then Structure
+```gherkin
+# Good
+Given I am on the login page
+When I enter valid credentials
+Then I should be logged in
+
+# Avoid
+I am on the login page and I enter valid credentials and I should be logged in
+```
+
+#### 3. Use Data Tables for Multiple Test Cases
+```gherkin
+Scenario Outline: Login with different user types
+  Given I navigate to "https://app.example.com/login"
+  When I enter "<email>" in "#email"
+  And I enter "<password>" in "#password"
+  And I click on "#login-button"
+  Then I should see "<expected_message>" in ".message"
+
+  Examples:
+    | email              | password   | expected_message |
+    | admin@example.com  | admin123   | Welcome, Admin!  |
+    | user@example.com   | user123    | Welcome, User!   |
+    | guest@example.com  | guest123   | Welcome, Guest!  |
+```
+
+#### 4. Use Background for Common Setup
+```gherkin
+Feature: Shopping Cart
+  Background:
+    Given I navigate to "https://shop.example.com"
+    And I am logged in as "test@example.com"
+    And I have items in my cart
+
+  Scenario: Add item to cart
+    When I click on "Add to Cart" for "Product A"
+    Then I should see "Product A added to cart" in ".notification"
+
+  Scenario: Remove item from cart
+    When I click on "Remove" for "Product A"
+    Then I should not see "Product A" in ".cart-items"
+```
+
+---
+
+## Step Definitions
+
+### Writing Reusable Steps
+
+#### 1. Use Parameters Effectively
+```javascript
+// Good - Flexible and reusable
+Given('I navigate to {string}', async (url) => {
+  await browser.goto(url);
+});
+
+// Avoid - Hard-coded values
+Given('I navigate to the login page', async () => {
+  await browser.goto('https://app.example.com/login');
+});
+```
+
+#### 2. Combine Related Actions
+```javascript
+// Good - Single step for related actions
+When('I fill the login form with:', async (dataTable) => {
+  const data = dataTable.hashes()[0];
+  await browser.fill('#email', data.email);
+  await browser.fill('#password', data.password);
+  await browser.click('#login-button');
+});
+
+// Usage in feature file:
+When I fill the login form with:
+  | email              | password   |
+  | john@example.com   | password123|
+```
+
+#### 3. Use Page Object Pattern
+```javascript
+// features/support/pages/LoginPage.js
+class LoginPage {
+  constructor(page) {
+    this.page = page;
+    this.emailField = '#email';
+    this.passwordField = '#password';
+    this.loginButton = '#login-button';
+  }
+
+  async fillCredentials(email, password) {
+    await this.page.fill(this.emailField, email);
+    await this.page.fill(this.passwordField, password);
+  }
+
+  async clickLogin() {
+    await this.page.click(this.loginButton);
+  }
+}
+
+// features/step-definitions/login.steps.js
+const { LoginPage } = require('../support/pages/LoginPage');
+
+Given('I am on the login page', async () => {
+  await browser.goto('https://app.example.com/login');
+  world.loginPage = new LoginPage(browser);
+});
+
+When('I enter {string} and {string}', async (email, password) => {
+  await world.loginPage.fillCredentials(email, password);
+});
+```
+
+---
+
+## Test Data Management
+
+### 1. Use Data Tables
+```gherkin
+Scenario: Create multiple users
+  When I create users with the following details:
+    | name     | email              | role    |
+    | John Doe | john@example.com   | admin   |
+    | Jane Doe | jane@example.com   | user    |
+    | Bob Smith| bob@example.com    | guest   |
+  Then I should see "3 users created" in ".status"
+```
+
+### 2. Use Scenario Outlines
+```gherkin
+Scenario Outline: Validate email format
+  When I enter "<email>" in "#email-field"
+  And I click on "#validate-button"
+  Then I should see "<result>" in ".validation-message"
+
+  Examples:
+    | email                | result        |
+    | valid@example.com    | Valid email   |
+    | invalid-email        | Invalid email |
+    | @example.com         | Invalid email |
+    | test@                | Invalid email |
+```
+
+### 3. External Data Files
+```javascript
+// features/support/test-data.js
+const testData = {
+  users: {
+    admin: {
+      email: 'admin@example.com',
+      password: 'admin123',
+      role: 'admin'
+    },
+    user: {
+      email: 'user@example.com',
+      password: 'user123',
+      role: 'user'
+    }
+  },
+  urls: {
+    login: 'https://app.example.com/login',
+    dashboard: 'https://app.example.com/dashboard'
+  }
+};
+
+module.exports = testData;
+```
+
+---
+
+## Code Organization
+
+### 1. Separate Step Definitions by Domain
+```
+features/
+├── step-definitions/
+│   ├── auth.steps.js      # Authentication steps
+│   ├── navigation.steps.js # Navigation steps
+│   ├── forms.steps.js     # Form interaction steps
+│   └── assertions.steps.js # Verification steps
+├── support/
+│   ├── pages/             # Page Object classes
+│   ├── helpers/           # Helper functions
+│   └── test-data.js       # Test data
+└── features/
+    ├── auth.feature
+    ├── navigation.feature
+    └── forms.feature
+```
+
+### 2. Use Helper Functions
+```javascript
+// features/support/helpers/browser-helpers.js
+async function waitForElement(selector, timeout = 30000) {
+  await browser.waitForSelector(selector, { timeout });
+}
+
+async function takeScreenshot(name) {
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  await browser.screenshot({ path: `screenshots/${name}-${timestamp}.png` });
+}
+
+module.exports = {
+  waitForElement,
+  takeScreenshot
+};
+```
+
+### 3. Configuration Management
+```javascript
+// features/support/config.js
+const config = {
+  baseUrl: process.env.BASE_URL || 'https://app.example.com',
+  timeout: parseInt(process.env.TIMEOUT) || 30000,
+  browser: process.env.BROWSER || 'chrome',
+  headless: process.env.HEADLESS === 'true'
+};
+
+module.exports = config;
+```
+
+---
+
+## Best Practices
+
+### 1. Keep Steps Atomic
+```gherkin
+# Good - Each step does one thing
+Given I navigate to "https://app.example.com"
+When I click on "#login-link"
+And I enter "john@example.com" in "#email"
+And I enter "password123" in "#password"
+And I click on "#login-button"
+Then I should see "Welcome" in ".message"
+
+# Avoid - Multiple actions in one step
+Given I navigate to the app and click login and enter credentials and submit
+```
+
+### 2. Use Meaningful Assertions
+```gherkin
+# Good - Specific and meaningful
+Then I should see "Welcome, John!" in ".welcome-message"
+And I should see the page title contains "Dashboard"
+And I should see element "#user-menu"
+
+# Avoid - Generic assertions
+Then I should see "text" in "body"
+```
+
+### 3. Handle Dynamic Content
+```gherkin
+# Good - Wait for specific content
+When I click on "#load-data"
+And I wait for ".data-loaded" to be visible
+Then I should see "Data loaded successfully" in ".status"
+
+# Avoid - Fixed time waits
+When I click on "#load-data"
+And I wait for "5" seconds
+Then I should see "Data loaded" in ".status"
+```
+
+### 4. Use Tags for Organization
+```gherkin
+@smoke @critical
+Scenario: User can log in
+  Given I navigate to "https://app.example.com/login"
+  When I enter valid credentials
+  Then I should be logged in
+
+@regression @forms
+Scenario: Form validation works
+  Given I am on the registration page
+  When I submit the form with invalid data
+  Then I should see validation errors
+```
+
+### 5. Clean Up After Tests
+```javascript
+// features/support/hooks.js
+const { Before, After } = require('@cucumber/cucumber');
+
+Before(async function() {
+  // Setup before each scenario
+  this.testData = await createTestUser();
+});
+
+After(async function() {
+  // Cleanup after each scenario
+  if (this.testData) {
+    await deleteTestUser(this.testData.id);
+  }
+});
+```
+
+---
+
+## Advanced Patterns
+
+### 1. Custom Step Definitions
+```javascript
+// features/step-definitions/custom.steps.js
+Given('I am logged in as {string}', async (userType) => {
+  const user = testData.users[userType];
+  await browser.goto(config.baseUrl + '/login');
+  await browser.fill('#email', user.email);
+  await browser.fill('#password', user.password);
+  await browser.click('#login-button');
+  await browser.waitForSelector('.dashboard');
+});
+```
+
+### 2. API Integration
+```javascript
+// features/step-definitions/api.steps.js
+Given('I have created a user via API', async () => {
+  const response = await fetch('https://api.example.com/users', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'Test User',
+      email: 'test@example.com'
+    })
+  });
+  this.createdUser = await response.json();
+});
+```
+
+### 3. Database Setup
+```javascript
+// features/step-definitions/database.steps.js
+Given('the database contains test data', async () => {
+  await database.seed({
+    users: [
+      { name: 'John Doe', email: 'john@example.com' },
+      { name: 'Jane Doe', email: 'jane@example.com' }
+    ]
+  });
+});
+```
+
+### 4. Parallel Test Execution
+```javascript
+// features/support/parallel-config.js
+const config = {
+  parallel: {
+    enabled: true,
+    workers: 4,
+    tags: ['@parallel']
+  }
+};
+```
+
+---
+
+## Performance Tips
+
+### 1. Optimize Selectors
+```javascript
+// Good - Fast and reliable
+await browser.click('#login-button');
+await browser.fill('[name="email"]', email);
+
+// Avoid - Slow and fragile
+await browser.click('//div[@class="form"]//button[@type="submit"]');
+await browser.fill('input[type="email"][placeholder="Enter email"]', email);
+```
+
+### 2. Minimize Waits
+```javascript
+// Good - Wait for specific conditions
+await browser.waitForSelector('.loading-complete');
+await browser.waitForFunction(() => document.readyState === 'complete');
+
+// Avoid - Fixed time waits
+await browser.wait(5000);
+```
+
+### 3. Use Parallel Execution
+```bash
+# Run tests in parallel
+zypin run --input features/ --parallel 4
+```
+
+---
+
+## Conclusion
+
+This writing guide provides the foundation for creating maintainable, readable, and effective test code with Zypin's Cucumber framework. Remember to:
+
+- Write clear, descriptive scenarios
+- Use atomic step definitions
+- Organize code logically
+- Follow best practices for maintainability
+- Optimize for performance
+
+For debugging help, use `zypin guide --debug` to access the debugging guide.
+
+SUCCESS: Command completed with exit code 0
+
+===========================================
+End of test: Tue Sep 23 22:00:59 +07 2025
