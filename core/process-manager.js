@@ -76,8 +76,18 @@ class ProcessManager {
 
   async startPackage(packageName, plugin) {
     if (this.processes.has(packageName)) {
-      logger.info(`Package ${packageName} is already running`);
-      return false;
+      const proc = this.processes.get(packageName);
+      // Check if process is actually alive
+      try {
+        process.kill(proc.pid, 0); // Signal 0 just checks if process exists
+        logger.info(`Package ${packageName} is already running`);
+        return false;
+      } catch (error) {
+        // Process is dead, remove from state and continue
+        logger.info(`Package ${packageName} was running but process is dead, cleaning up...`);
+        this.processes.delete(packageName);
+        this.saveState();
+      }
     }
 
     if (!plugin.hasStart) {

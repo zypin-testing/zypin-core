@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin --debug
-Timestamp: Tue Sep 23 22:00:34 +07 2025
+Timestamp: Wed Sep 24 06:51:13 +07 2025
 Category: global-mode
 Timeout: 10s
 Long-running: false
@@ -27,4 +27,4 @@ Commands:
 ERROR: Command failed with exit code 1
 
 ===========================================
-End of test: Tue Sep 23 22:00:35 +07 2025
+End of test: Wed Sep 24 06:51:14 +07 2025

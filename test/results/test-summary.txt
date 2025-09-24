@@ -1,18 +1,21 @@
 Zypin CLI Test Summary
-Generated on: Tue Sep 23 21:59:39 +07 2025
+Generated on: Wed Sep 24 06:49:44 +07 2025
 Status,Description,Category,Filename
 ===========================================
 SUCCESS,zypin (main help),global-mode,01-main-help
 SUCCESS,zypin start --help,global-mode,02-start-help
 SUCCESS,zypin start (no packages),global-mode,03-start-no-packages
-TIMEOUT,zypin start --packages invalid-package,global-mode,04-start-invalid-package
-SUCCESS,zypin start --packages selenium,global-mode,05-start-valid-package
+SUCCESS,zypin start --packages invalid-package,global-mode,04-start-invalid-package
+TIMEOUT,zypin start --packages selenium,global-mode,05-start-valid-package
+SUCCESS,zypin start --packages selenium (server running),global-mode,05b-start-already-running
+TIMEOUT,zypin start --packages selenium --force,global-mode,05c-start-force-restart
+SUCCESS,zypin start --force,global-mode,05d-start-force-no-packages
 SUCCESS,zypin start --server http://remote:8421,global-mode,06-start-remote-server
 SUCCESS,zypin create-project --help,global-mode,07-create-project-help
 SUCCESS,zypin create-project (no name),global-mode,08-create-project-no-name
 SUCCESS,zypin create-project test-project (no template),global-mode,09-create-project-no-template
 SUCCESS,zypin create-project test-project --template invalid/template,global-mode,10-create-project-invalid-template
-FAILED,zypin create-project test-project --template selenium/cucumber-bdd,global-mode,11-create-project-valid-template
+SUCCESS,zypin create-project test-project --template selenium/cucumber-bdd,global-mode,11-create-project-valid-template
 SUCCESS,zypin create-project test-project --template selenium/cucumber-bdd --force,global-mode,12-create-project-with-force
 SUCCESS,zypin update --help,global-mode,13-update-help
 TIMEOUT,zypin update,global-mode,14-update-execution

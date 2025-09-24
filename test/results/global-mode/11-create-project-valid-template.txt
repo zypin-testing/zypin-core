@@ -1,14 +1,19 @@
 Zypin CLI Test Result
 Command: zypin create-project test-project --template selenium/cucumber-bdd
-Timestamp: Tue Sep 23 22:00:02 +07 2025
+Timestamp: Wed Sep 24 06:50:41 +07 2025
 Category: global-mode
 Timeout: 10s
 Long-running: false
 ===========================================
 
 Creating project...
-Failed to create project: Directory already exists: /Users/tien.h.nguyen/Repositories/zypin-testing/zypin-core/test-project. Use --force to overwrite.
-ERROR: Command failed with exit code 1
+✓ Project created successfully: test-project
+Location: /Users/tien.h.nguyen/Repositories/zypin-testing/zypin-core/test-project
+Next steps:
+  cd test-project
+  npm install
+  zypin run --input features/
+SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Tue Sep 23 22:00:03 +07 2025
+End of test: Wed Sep 24 06:50:42 +07 2025

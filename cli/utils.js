@@ -74,7 +74,6 @@ function showStartHelp() {
 
   if (availablePlugins.length === 0) {
     console.log(chalk.yellow('No packages found in node_modules/@zypin/'));
-    console.log(chalk.gray('Install packages with: npm install -g <package-url>'));
   } else {
     availablePlugins.forEach(plugin => {
       const capabilities = [];
@@ -91,21 +90,30 @@ function showStartHelp() {
   }
 
   console.log('');
-  console.log(chalk.blue('💡 Usage Examples:'));
-  console.log(chalk.gray('='.repeat(20)));
-  console.log(chalk.gray('  zypin start --packages <package>'));
-  console.log('');
+  
+  // Only show usage examples when packages are available
+  if (availablePlugins.length > 0) {
+    console.log(chalk.blue('💡 Usage Examples:'));
+    console.log(chalk.gray('='.repeat(20)));
+    const firstPackage = availablePlugins[0].name;
+    console.log(chalk.gray(`  zypin start --packages ${firstPackage}`));
+    if (availablePlugins.length > 1) {
+      console.log(chalk.gray(`  zypin start --packages ${firstPackage},${availablePlugins[1].name}`));
+    }
+    console.log('');
+  }
 
   console.log(chalk.blue('🔧 Options:'));
   console.log(chalk.gray('='.repeat(15)));
   console.log(chalk.gray('  --packages <packages>  Comma-separated list of packages to start'));
+  console.log(chalk.gray('  --force               Force restart server even if already running'));
   console.log('');
 
   console.log(chalk.blue('📚 Next Steps:'));
   console.log(chalk.gray('='.repeat(15)));
   console.log(chalk.gray('  1. Start packages:  zypin start --packages <package>'));
   console.log(chalk.gray('  2. Check health:    zypin health --server http://localhost:8421'));
-  console.log(chalk.gray('  3. Create project:  zypin create-project <name> --template <template>'));
+  console.log(chalk.gray('  3. Run tests:       cd <project> && zypin run --input <files>'));
   console.log('');
 
   console.log(chalk.gray('For more help: zypin --help'));
@@ -126,7 +134,6 @@ function showCreateProjectHelp() {
 
   if (availableTemplates.length === 0) {
     console.log(chalk.yellow('No templates found'));
-    console.log(chalk.gray('Install packages with templates: npm install -g <package-url>'));
   } else {
     availableTemplates.forEach(template => {
       console.log(`  ${chalk.green('●')} ${chalk.bold(template.namespacedName)}`);
@@ -138,7 +145,10 @@ function showCreateProjectHelp() {
   console.log('');
   console.log(chalk.blue('💡 Usage Examples:'));
   console.log(chalk.gray('='.repeat(20)));
-  console.log(chalk.gray('  zypin create-project my-tests --template <package>/<template>'));
+  
+  // Get first template for example
+  const firstTemplate = availableTemplates.length > 0 ? availableTemplates[0].namespacedName : '<package>/<template>';
+  console.log(chalk.gray(`  zypin create-project my-tests --template ${firstTemplate}`));
   console.log('');
 
   console.log(chalk.blue('🔧 Options:'));
@@ -152,6 +162,7 @@ function showCreateProjectHelp() {
   console.log(chalk.gray('  1. Create project: zypin create-project <name> --template <template>'));
   console.log(chalk.gray('  2. Install deps:   cd <project> && npm install'));
   console.log(chalk.gray('  3. Learn to run:   zypin run --help'));
+  console.log(chalk.gray('  4. View guides:    zypin guide --help'));
   console.log('');
 
   console.log(chalk.gray('For more help: zypin --help'));

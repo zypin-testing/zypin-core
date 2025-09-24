@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin run --input test/features/step-definitions-test.feature --headless
-Timestamp: Tue Sep 23 22:00:44 +07 2025
+Timestamp: Wed Sep 24 06:51:24 +07 2025
 Category: template-mode
 Timeout: 30s
 Long-running: true
@@ -21,4 +21,4 @@ Warning: Input not found: test/features/step-definitions-test.feature
 ERROR: Command failed with exit code 1
 
 ===========================================
-End of test: Tue Sep 23 22:00:47 +07 2025
+End of test: Wed Sep 24 06:51:26 +07 2025

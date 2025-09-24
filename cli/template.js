@@ -70,10 +70,25 @@ function setupCommands(program) {
 
     const userPackageJson = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8'));
     const packageName = userPackageJson.zypin?.package;
+    const templateName = userPackageJson.zypin?.template;
 
     if (!packageName) {
       console.log(chalk.red('No zypin package configuration found in package.json.'));
       console.log(chalk.gray('Make sure you created this project with "zypin create-project".'));
+      return;
+    }
+
+    if (!templateName) {
+      console.log(chalk.red('No zypin template configuration found in package.json.'));
+      console.log(chalk.gray('Make sure you created this project with "zypin create-project".'));
+      return;
+    }
+
+    // Validate template exists
+    const template = templateScanner.getTemplate(`${packageName}/${templateName}`);
+    if (!template) {
+      console.log(chalk.red(`Template '${packageName}/${templateName}' not found`));
+      console.log(chalk.gray('Make sure the template exists and is properly configured.'));
       return;
     }
 

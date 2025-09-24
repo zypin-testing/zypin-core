@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin start --packages invalid-package
-Timestamp: Tue Sep 23 21:59:42 +07 2025
+Timestamp: Wed Sep 24 06:49:47 +07 2025
 Category: global-mode
 Timeout: 10s
 Long-running: false
@@ -14,8 +14,9 @@ Package 'invalid-package' not found
 Available packages:
   • selenium - Selenium Grid integration for web testing
 Started 0 of 1 packages
-TIMEOUT: Command timed out after 10 seconds
+No packages started. Stopping server.
+info: Server stopped
+SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Tue Sep 23 21:59:54 +07 2025
-info: Server stopped
+End of test: Wed Sep 24 06:49:48 +07 2025

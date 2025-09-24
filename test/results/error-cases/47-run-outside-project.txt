@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin run outside project (template mode)
-Timestamp: Tue Sep 23 22:01:05 +07 2025
+Timestamp: Wed Sep 24 06:51:45 +07 2025
 Category: error-cases
 Timeout: 10s
 Long-running: false
@@ -10,4 +10,4 @@ error: unknown command 'run'
 ERROR: Command failed with exit code 1
 
 ===========================================
-End of test: Tue Sep 23 22:01:06 +07 2025
+End of test: Wed Sep 24 06:51:46 +07 2025

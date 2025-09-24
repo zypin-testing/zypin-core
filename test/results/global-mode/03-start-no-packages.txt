@@ -1,14 +1,11 @@
 Zypin CLI Test Result
 Command: zypin start (no packages)
-Timestamp: Tue Sep 23 21:59:41 +07 2025
+Timestamp: Wed Sep 24 06:49:46 +07 2025
 Category: global-mode
 Timeout: 10s
 Long-running: false
 ===========================================
 
-Starting Zypin server...
-info: Zypin server running on port 8421
-✓ Server running on port 8421
 🚀 Zypin Package Starter
 ==============================
 Start testing packages and their services
@@ -21,23 +18,21 @@ Start testing packages and their services
 
 💡 Usage Examples:
 ====================
-  zypin start --packages <package>
+  zypin start --packages selenium
 
 🔧 Options:
 ===============
   --packages <packages>  Comma-separated list of packages to start
+  --force               Force restart server even if already running
 
 📚 Next Steps:
 ===============
   1. Start packages:  zypin start --packages <package>
   2. Check health:    zypin health --server http://localhost:8421
-  3. Create project:  zypin create-project <name> --template <template>
+  3. Run tests:       cd <project> && zypin run --input <files>
 
 For more help: zypin --help
-
-No packages specified. Stopping server.
-info: Server stopped
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Tue Sep 23 21:59:42 +07 2025
+End of test: Wed Sep 24 06:49:47 +07 2025

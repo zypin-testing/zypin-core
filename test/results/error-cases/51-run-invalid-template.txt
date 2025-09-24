@@ -1,16 +1,14 @@
 Zypin CLI Test Result
 Command: zypin run with invalid template
-Timestamp: Tue Sep 23 22:01:09 +07 2025
+Timestamp: Wed Sep 24 06:51:49 +07 2025
 Category: error-cases
 Timeout: 10s
 Long-running: false
 ===========================================
 
-Package 'invalid' does not support test execution.
-❌ Unknown package: invalid
-Available packages:
-  • selenium - Selenium Grid integration for web testing
+Template 'invalid/invalid' not found
+Make sure the template exists and is properly configured.
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Tue Sep 23 22:01:10 +07 2025
+End of test: Wed Sep 24 06:51:50 +07 2025

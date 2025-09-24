@@ -27,9 +27,10 @@ function setupCommands(program) {
   const startCommand = program
     .command('start')
     .description('Start testing packages and server')
-    .option('--packages <packages>', 'Comma-separated list of packages to start');
+    .option('--packages <packages>', 'Comma-separated list of packages to start')
+    .option('--force', 'Force restart server even if already running');
 
-  startCommand.helpInformation = function() {
+  startCommand.helpInformation = function () {
     utils.showStartHelp();
     return '';
   };
@@ -55,12 +56,50 @@ function setupCommands(program) {
       return;
     }
 
+    if (!options.packages) {
+      utils.showStartHelp();
+      return;
+    }
+
     // Check if server is already running
     const serverStatus = await zypinServer.status();
     if (serverStatus.isRunning) {
-      console.log(chalk.yellow('Zypin server is already running'));
-      console.log(chalk.gray(`Server running on ${serverStatus.url}`));
-      return;
+      if (options.force) {
+        console.log(chalk.yellow('Force restart requested. Stopping existing server...'));
+
+        // Kill processes on port
+        try {
+
+          const { execSync } = require('child_process');
+          const serverPort = zypinServer.getServerPort();
+          const pids = execSync(`lsof -ti:${serverPort} -sTCP:LISTEN`, { encoding: 'utf8' })
+            .split('\n')
+            .map(pid => pid.trim())
+            .filter(pid => pid);
+
+          if (pids.length > 0) {
+            // Kill all processes using the port
+            pids.forEach(pid => {
+              try {
+                process.kill(pid, 'SIGTERM');
+              } catch (killError) {
+                // Process might already be dead
+              }
+            });
+            console.log(chalk.green(`✓ Stopped ${pids.length} existing server process(es)`));
+          }
+        } catch (error) {
+          // Ignore errors
+        }
+
+        // Simple wait
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } else {
+        console.log(chalk.yellow('Zypin server is already running'));
+        console.log(chalk.gray(`Server running on ${serverStatus.url}`));
+        console.log(chalk.blue('💡 Tip: Use --force to restart the server'));
+        return;
+      }
     }
 
     // Start server immediately when start command begins
@@ -71,14 +110,6 @@ function setupCommands(program) {
     } catch (error) {
       console.log(chalk.red('Failed to start server:', error.message));
       console.log(chalk.red('Aborting start command'));
-      return;
-    }
-
-    if (!options.packages) {
-      utils.showStartHelp();
-      // Stop server when no packages specified
-      console.log(chalk.gray('\nNo packages specified. Stopping server.'));
-      await zypinServer.stopServer();
       return;
     }
 
@@ -104,6 +135,12 @@ function setupCommands(program) {
     }
 
     console.log(chalk.green(`Started ${startedCount} of ${packageNames.length} packages`));
+
+    // Stop server if no packages were started
+    if (startedCount === 0) {
+      console.log(chalk.gray('No packages started. Stopping server.'));
+      await zypinServer.stopServer();
+    }
   });
 
   // Create-project command
@@ -114,7 +151,7 @@ function setupCommands(program) {
     .option('--template <template>', 'Template to use (e.g., <package>/<template>)')
     .option('--force', 'Overwrite existing directory');
 
-  createProjectCommand.helpInformation = function() {
+  createProjectCommand.helpInformation = function () {
     utils.showCreateProjectHelp();
     return '';
   };
@@ -219,7 +256,7 @@ function setupCommands(program) {
     .option('-l, --height <height>', 'Viewport height', '720')
     .option('-t, --timeout <timeout>', 'Default timeout in milliseconds', '30000');
 
-  mcpCommand.helpInformation = function() {
+  mcpCommand.helpInformation = function () {
     utils.showMcpHelp();
     return '';
   };
@@ -236,7 +273,7 @@ function setupCommands(program) {
     try {
       // Build command arguments for zypin-mcp
       const args = [];
-      
+
       if (options.browser) args.push('--browser', options.browser);
       if (options.headed) args.push('--headed');
       if (options.width) args.push('--width', options.width);
@@ -285,7 +322,7 @@ function setupCommands(program) {
     .command('health')
     .description('Check health status of running packages');
 
-  healthCommand.helpInformation = function() {
+  healthCommand.helpInformation = function () {
     utils.showHealthHelp();
     return '';
   };

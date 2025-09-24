@@ -201,6 +201,33 @@ run_command "node cli/index.js start --packages invalid-package" "zypin start --
 # 5. Start command with valid package (long-running)
 run_command "node cli/index.js start --packages selenium" "zypin start --packages selenium" "global-mode" "05-start-valid-package" "15" "true"
 
+# 5b. Start command when server already running (macOS compatible)
+# Start server in background first
+node cli/index.js start --packages selenium > /dev/null 2>&1 &
+SERVER_PID=$!
+sleep 3  # Wait for server to start
+run_command "node cli/index.js start --packages selenium" "zypin start --packages selenium (server running)" "global-mode" "05b-start-already-running" "5" "false"
+# Clean up background server
+kill $SERVER_PID 2>/dev/null || true
+
+# 5c. Start command with force flag (force restart)
+# Start server in background first
+node cli/index.js start --packages selenium > /dev/null 2>&1 &
+SERVER_PID=$!
+sleep 3  # Wait for server to start
+run_command "node cli/index.js start --packages selenium --force" "zypin start --packages selenium --force" "global-mode" "05c-start-force-restart" "15" "true"
+# Clean up background server
+kill $SERVER_PID 2>/dev/null || true
+
+# 5d. Start command with force flag but no packages (should show help)
+# Start server in background first
+node cli/index.js start --packages selenium > /dev/null 2>&1 &
+SERVER_PID=$!
+sleep 3  # Wait for server to start
+run_command "node cli/index.js start --force" "zypin start --force" "global-mode" "05d-start-force-no-packages" "5" "false"
+# Clean up background server
+kill $SERVER_PID 2>/dev/null || true
+
 # 6. Start command with remote server
 run_command "node cli/index.js start --server http://remote:8421" "zypin start --server http://remote:8421" "global-mode" "06-start-remote-server" "10" "false"
 

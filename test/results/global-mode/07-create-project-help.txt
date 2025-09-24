@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin create-project --help
-Timestamp: Tue Sep 23 21:59:58 +07 2025
+Timestamp: Wed Sep 24 06:50:37 +07 2025
 Category: global-mode
 Timeout: 10s
 Long-running: false
@@ -38,4 +38,4 @@ For more help: zypin --help
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Tue Sep 23 21:59:59 +07 2025
+End of test: Wed Sep 24 06:50:38 +07 2025

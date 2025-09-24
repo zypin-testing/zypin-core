@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin mcp --browser firefox
-Timestamp: Tue Sep 23 22:00:20 +07 2025
+Timestamp: Wed Sep 24 06:51:00 +07 2025
 Category: global-mode
 Timeout: 10s
 Long-running: true
@@ -13,4 +13,4 @@ Zypin MCP Server started successfully
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Tue Sep 23 22:00:23 +07 2025
+End of test: Wed Sep 24 06:51:02 +07 2025

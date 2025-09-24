@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin mcp --help
-Timestamp: Tue Sep 23 22:00:17 +07 2025
+Timestamp: Wed Sep 24 06:50:57 +07 2025
 Category: global-mode
 Timeout: 10s
 Long-running: false
@@ -42,4 +42,4 @@ For more help: zypin --help
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Tue Sep 23 22:00:18 +07 2025
+End of test: Wed Sep 24 06:50:58 +07 2025

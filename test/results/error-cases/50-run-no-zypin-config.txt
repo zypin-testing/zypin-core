@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin run without zypin config
-Timestamp: Tue Sep 23 22:01:08 +07 2025
+Timestamp: Wed Sep 24 06:51:48 +07 2025
 Category: error-cases
 Timeout: 10s
 Long-running: false
@@ -10,4 +10,4 @@ error: unknown command 'run'
 ERROR: Command failed with exit code 1
 
 ===========================================
-End of test: Tue Sep 23 22:01:09 +07 2025
+End of test: Wed Sep 24 06:51:49 +07 2025
