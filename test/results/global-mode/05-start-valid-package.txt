@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin start --packages selenium
-Timestamp: Wed Sep 24 06:49:48 +07 2025
+Timestamp: Wed Sep 24 07:52:28 +07 2025
 Category: global-mode
 Timeout: 15s
 Long-running: true
@@ -12,12 +12,12 @@ info: Zypin server running on port 8421
 info: Starting selenium...
 ✓ Java 17.0.16 detected
 🚀 Starting Selenium Grid on port 8422...
-info: selenium started (PID: 77585)
+info: selenium started (PID: 50426)
 Started 1 of 1 packages
 TIMEOUT: Command timed out after 15 seconds
 info: Cleaning up processes...
-info: Stopping selenium (PID: 77585)...
+info: Stopping selenium (PID: 50426)...
 info: Server stopped
 
 ===========================================
-End of test: Wed Sep 24 06:50:06 +07 2025
+End of test: Wed Sep 24 07:52:46 +07 2025

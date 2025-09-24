@@ -222,14 +222,16 @@ function showRunHelp() {
       console.log(chalk.gray(`  ${example}`));
     });
   } else {
-    // Show generic example
+    // Show generic examples
     console.log(chalk.gray('  zypin run --input <files>'));
+    console.log(chalk.gray('  zypin run --input <files> --server http://localhost:8421'));
   }
   console.log('');
 
   console.log(chalk.blue('🔧 Configuration Options:'));
   console.log(chalk.gray('='.repeat(25)));
   console.log(chalk.gray('  --input <files>        Test files or directories to run (required)'));
+  console.log(chalk.gray('  --server <url>         Zypin server URL (e.g., http://server:8421)'));
   console.log(chalk.gray('  --browser <browser>     Browser (chrome, firefox, safari, edge)'));
   console.log(chalk.gray('  --headless             Run in headless mode'));
   console.log(chalk.gray('  --timeout <ms>         Test timeout in milliseconds'));
@@ -248,7 +250,7 @@ function showRunHelp() {
     });
   } else {
     // Show generic next steps
-    console.log(chalk.gray('  1. Start servers:  zypin start --packages <package>'));
+    console.log(chalk.gray(`  1. Start servers:  zypin start --packages ${packageName}`));
     console.log(chalk.gray('  2. Run tests:      zypin run --input <files>'));
   }
   console.log('');

@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin run with invalid package.json
-Timestamp: Wed Sep 24 06:51:47 +07 2025
+Timestamp: Wed Sep 24 07:54:31 +07 2025
 Category: error-cases
 Timeout: 10s
 Long-running: false
@@ -10,4 +10,4 @@ error: unknown command 'run'
 ERROR: Command failed with exit code 1
 
 ===========================================
-End of test: Wed Sep 24 06:51:48 +07 2025
+End of test: Wed Sep 24 07:54:32 +07 2025

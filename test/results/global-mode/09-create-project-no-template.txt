@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin create-project test-project (no template)
-Timestamp: Wed Sep 24 06:50:39 +07 2025
+Timestamp: Wed Sep 24 07:53:21 +07 2025
 Category: global-mode
 Timeout: 10s
 Long-running: false
@@ -21,7 +21,7 @@ Create a new test project from available templates
 
 💡 Usage Examples:
 ====================
-  zypin create-project my-tests --template <package>/<template>
+  zypin create-project my-tests --template selenium/basic-webdriver
 
 🔧 Options:
 ===============
@@ -33,9 +33,10 @@ Create a new test project from available templates
   1. Create project: zypin create-project <name> --template <template>
   2. Install deps:   cd <project> && npm install
   3. Learn to run:   zypin run --help
+  4. View guides:    zypin guide --help
 
 For more help: zypin --help
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Wed Sep 24 06:50:40 +07 2025
+End of test: Wed Sep 24 07:53:22 +07 2025

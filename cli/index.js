@@ -71,7 +71,6 @@ program
   .name('zypin')
   .description('Tool-agnostic testing framework')
   .version('0.1.0')
-  .option('--server <url>', 'Zypin server URL (e.g., http://server:8421)')
   .option('--debug', 'Enable debug mode to show detailed output');
 
 // Auto-help behavior when no arguments provided

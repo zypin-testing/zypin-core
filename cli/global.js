@@ -41,21 +41,6 @@ function setupCommands(program) {
       console.log(chalk.gray('Debug mode enabled'));
     }
 
-    const serverUrl = program.opts().server;
-
-    if (serverUrl) {
-      try {
-        const url = new URL(serverUrl);
-        console.log(chalk.yellow('Remote start not supported. Please SSH to server:'));
-        console.log(chalk.gray(`ssh user@${url.hostname}`));
-        console.log(chalk.gray(`zypin start --packages ${options.packages || '<package>'}`));
-      } catch (error) {
-        console.log(chalk.red('Invalid server URL provided:'), serverUrl);
-        console.log(chalk.gray('Please provide a valid URL (e.g., http://server:8421)'));
-      }
-      return;
-    }
-
     if (!options.packages) {
       utils.showStartHelp();
       return;
@@ -320,20 +305,21 @@ function setupCommands(program) {
   // Health command
   const healthCommand = program
     .command('health')
-    .description('Check health status of running packages');
+    .description('Check health status of running packages')
+    .option('--server <url>', 'Zypin server URL (e.g., http://server:8421)');
 
   healthCommand.helpInformation = function () {
     utils.showHealthHelp();
     return '';
   };
 
-  healthCommand.action(async () => {
+  healthCommand.action(async (options) => {
     if (program.opts().debug) {
       process.env.ZYPIN_DEBUG = 'true';
       console.log(chalk.gray('Debug mode enabled'));
     }
 
-    const serverUrl = program.opts().server;
+    const serverUrl = options.server;
 
     if (!serverUrl) {
       utils.showHealthHelp();

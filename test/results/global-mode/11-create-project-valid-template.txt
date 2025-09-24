@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin create-project test-project --template selenium/cucumber-bdd
-Timestamp: Wed Sep 24 06:50:41 +07 2025
+Timestamp: Wed Sep 24 07:53:23 +07 2025
 Category: global-mode
 Timeout: 10s
 Long-running: false
@@ -16,4 +16,4 @@ Next steps:
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Wed Sep 24 06:50:42 +07 2025
+End of test: Wed Sep 24 07:53:24 +07 2025

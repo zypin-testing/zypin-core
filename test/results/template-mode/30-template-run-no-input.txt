@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin run (no input)
-Timestamp: Wed Sep 24 06:51:19 +07 2025
+Timestamp: Wed Sep 24 07:54:01 +07 2025
 Category: template-mode
 Timeout: 10s
 Long-running: false
@@ -24,6 +24,7 @@ Run tests using detected template from package.json
 🔧 Configuration Options:
 =========================
   --input <files>        Test files or directories to run (required)
+  --server <url>         Zypin server URL (e.g., http://server:8421)
   --browser <browser>     Browser (chrome, firefox, safari, edge)
   --headless             Run in headless mode
   --timeout <ms>         Test timeout in milliseconds
@@ -41,4 +42,4 @@ For more help: zypin --help
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Wed Sep 24 06:51:20 +07 2025
+End of test: Wed Sep 24 07:54:02 +07 2025

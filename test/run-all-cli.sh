@@ -228,8 +228,8 @@ run_command "node cli/index.js start --force" "zypin start --force" "global-mode
 # Clean up background server
 kill $SERVER_PID 2>/dev/null || true
 
-# 6. Start command with remote server
-run_command "node cli/index.js start --server http://remote:8421" "zypin start --server http://remote:8421" "global-mode" "06-start-remote-server" "10" "false"
+# 6. Start command with remote server (should fail - --server not supported for start)
+run_command "node cli/index.js start --server http://remote:8421" "zypin start --server http://remote:8421" "global-mode" "06-start-remote-server" "10" "true"
 
 # 7. Create-project command help
 run_command "node cli/index.js create-project --help" "zypin create-project --help" "global-mode" "07-create-project-help"
@@ -288,8 +288,8 @@ run_command "node cli/index.js health --server http://invalid:8421" "zypin healt
 # 25. Global options - debug mode
 run_command "node cli/index.js --debug" "zypin --debug" "global-mode" "25-global-debug"
 
-# 26. Global options - server option
-run_command "node cli/index.js --server http://remote:8421" "zypin --server http://remote:8421" "global-mode" "26-global-server"
+# 26. Global options - server option (should fail - --server not a global option)
+run_command "node cli/index.js --server http://remote:8421" "zypin --server http://remote:8421" "global-mode" "26-global-server" "10" "true"
 
 # 27. Version display
 run_command "node cli/index.js --version" "zypin --version" "global-mode" "27-version"
@@ -348,8 +348,8 @@ run_command "node ../../../zypin-core/cli/index.js guide --readme" "zypin guide 
 # 43. Template mode with debug option
 run_command "node ../../../zypin-core/cli/index.js --debug" "zypin --debug (template mode)" "template-mode" "43-template-debug"
 
-# 44. Template mode with server option
-run_command "node ../../../zypin-core/cli/index.js --server http://remote:8421" "zypin --server http://remote:8421 (template mode)" "template-mode" "44-template-server"
+# 44. Template mode with server option (should fail - --server not a global option)
+run_command "node ../../../zypin-core/cli/index.js --server http://remote:8421" "zypin --server http://remote:8421 (template mode)" "template-mode" "44-template-server" "10" "true"
 
 # Test Error Cases and Edge Cases
 print_status "Testing Error Cases and Edge Cases..."

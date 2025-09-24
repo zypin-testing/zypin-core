@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin start --force
-Timestamp: Wed Sep 24 06:50:35 +07 2025
+Timestamp: Wed Sep 24 07:53:15 +07 2025
 Category: global-mode
 Timeout: 5s
 Long-running: false
@@ -35,4 +35,4 @@ For more help: zypin --help
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Wed Sep 24 06:50:36 +07 2025
+End of test: Wed Sep 24 07:53:16 +07 2025

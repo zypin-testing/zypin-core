@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin run with invalid template
-Timestamp: Wed Sep 24 06:51:49 +07 2025
+Timestamp: Wed Sep 24 07:54:33 +07 2025
 Category: error-cases
 Timeout: 10s
 Long-running: false
@@ -11,4 +11,4 @@ Make sure the template exists and is properly configured.
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Wed Sep 24 06:51:50 +07 2025
+End of test: Wed Sep 24 07:54:34 +07 2025

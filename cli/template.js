@@ -25,6 +25,7 @@ function setupCommands(program) {
     .command('run')
     .description('Run tests using detected template')
     .option('--input <files>', 'Test files or directories to run (required)')
+    .option('--server <url>', 'Zypin server URL (e.g., http://server:8421)')
     .option('--browser <browser>', 'Browser to use (chrome, firefox, safari, edge)')
     .option('--headless', 'Run in headless mode')
     .option('--timeout <ms>', 'Test timeout in milliseconds')
@@ -45,6 +46,15 @@ function setupCommands(program) {
 
     if (!options.input) {
       utils.showRunHelp();
+      return;
+    }
+
+    // Handle server option if provided
+    const serverUrl = options.server;
+    if (serverUrl) {
+      console.log(chalk.blue(`Using remote server: ${serverUrl}`));
+      // TODO: Implement remote server integration for run command
+      console.log(chalk.yellow('Remote server integration for run command not yet implemented'));
       return;
     }
 

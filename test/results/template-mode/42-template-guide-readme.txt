@@ -1,6 +1,6 @@
 Zypin CLI Test Result
 Command: zypin guide --readme
-Timestamp: Wed Sep 24 06:51:39 +07 2025
+Timestamp: Wed Sep 24 07:54:23 +07 2025
 Category: template-mode
 Timeout: 10s
 Long-running: false
@@ -137,4 +137,4 @@ zypin run --input features/ --debug
 SUCCESS: Command completed with exit code 0
 
 ===========================================
-End of test: Wed Sep 24 06:51:40 +07 2025
+End of test: Wed Sep 24 07:54:24 +07 2025
