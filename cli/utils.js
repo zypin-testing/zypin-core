@@ -260,7 +260,7 @@ function showRunHelp() {
 function showMcpHelp() {
   console.log(chalk.blue('🤖 Zypin MCP Server'));
   console.log(chalk.gray('='.repeat(25)));
-  console.log(chalk.gray('Start MCP server for browser automation via Model Context Protocol'));
+  console.log(chalk.gray('Start MCP server for testing automation and tool integration'));
   console.log('');
 
   console.log(chalk.blue('💡 Usage Examples:'));
@@ -284,14 +284,14 @@ function showMcpHelp() {
   console.log(chalk.gray('='.repeat(15)));
   console.log(chalk.gray('  1. Start MCP server: zypin mcp'));
   console.log(chalk.gray('  2. Connect AI tools: Use MCP protocol to connect'));
-  console.log(chalk.gray('  3. Automate browser: Send commands via MCP'));
+  console.log(chalk.gray('  3. Automate testing: Send commands via MCP'));
   console.log('');
 
   console.log(chalk.blue('🔍 What it does:'));
   console.log(chalk.gray('='.repeat(20)));
   console.log(chalk.gray('  • Starts Model Context Protocol server'));
-  console.log(chalk.gray('  • Provides browser automation capabilities'));
-  console.log(chalk.gray('  • Enables AI tools to control browsers'));
+  console.log(chalk.gray('  • Provides testing automation capabilities'));
+  console.log(chalk.gray('  • Enables AI tools to control testing workflows'));
   console.log(chalk.gray('  • Supports multiple browsers and configurations'));
   console.log('');
 

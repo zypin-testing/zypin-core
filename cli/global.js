@@ -7,7 +7,7 @@
  * - Implement create-project command with template selection
  * - Implement update command for framework packages
  * - Implement health command for remote server status
- * - Implement mcp command for browser automation server
+ * - Implement mcp command for testing automation server
  * - Add proper error handling and user feedback
  * - Integrate with existing core modules (plugin-loader, template-scanner, etc.)
  */
@@ -249,7 +249,7 @@ function setupCommands(program) {
   // MCP command
   const mcpCommand = program
     .command('mcp')
-    .description('Start MCP server for browser automation')
+    .description('Start MCP server for testing automation')
     .option('-b, --browser <browser>', 'Browser to use (chromium, firefox, webkit)', 'chromium')
     .option('--headed', 'Run browser in headed mode')
     .option('-w, --width <width>', 'Viewport width', '1280')
@@ -266,7 +266,7 @@ function setupCommands(program) {
       process.env.ZYPIN_DEBUG = 'true';
       console.log(chalk.gray('Debug mode enabled'));
       console.log(chalk.blue('🚀 Starting Zypin MCP Server...'));
-      console.log(chalk.gray('Browser automation via Model Context Protocol'));
+      console.log(chalk.gray('Testing automation via Model Context Protocol'));
       console.log('');
     }
 

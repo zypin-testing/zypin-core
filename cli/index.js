@@ -60,7 +60,7 @@ function showModeHelp(isProject) {
     console.log(chalk.gray('  create-project Create a new test project from template'));
     console.log(chalk.gray('  update         Update zypin framework and packages'));
     console.log(chalk.gray('  health         Check health status of running packages'));
-    console.log(chalk.gray('  mcp            Start MCP server for browser automation'));
+    console.log(chalk.gray('  mcp            Start MCP server for testing automation'));
     console.log('');
     console.log(chalk.gray('For more help: zypin <command> --help'));
   }

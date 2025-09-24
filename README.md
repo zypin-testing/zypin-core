@@ -27,13 +27,13 @@ zypin run --input test.js
 - `zypin start` - Start testing packages
 - `zypin run` - Run tests
 - `zypin create-project` - Create test project from template
-- `zypin mcp` - Start MCP server for browser automation
+- `zypin mcp` - Start MCP server for testing automation
 - `zypin health` - Check service health
 - `zypin update` - Update framework and packages
 
 ## MCP Integration
 
-Browser automation via Model Context Protocol.
+Testing automation via Model Context Protocol.
 
 ### MCP Client Configuration
 
